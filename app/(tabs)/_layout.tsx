@@ -1,5 +1,6 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
+import { Feather, AntDesign, Octicons, Ionicons } from "@expo/vector-icons";
 import { Pressable, useColorScheme } from "react-native";
 
 import Colors from "../../constants/Colors";
@@ -7,12 +8,6 @@ import Colors from "../../constants/Colors";
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -20,28 +15,54 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarStyle: {
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+          height: 58,
+        },
+        tabBarActiveTintColor: Colors["light"].tint,
       }}
     >
       <Tabs.Screen
         name="account"
         options={{
-          title: "Account",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <Feather
+              name="user"
+              size={22}
+              style={{ marginBottom: -3 }}
+              color={color}
+            />
+          ),
         }}
       />
       <Tabs.Screen
         name="donate"
         options={{
-          title: "Donate",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <AntDesign
+              name="creditcard"
+              size={22}
+              style={{ marginBottom: -3 }}
+              color={color}
+            />
+          ),
         }}
       />
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <Octicons
+              name="home"
+              size={22}
+              style={{ marginBottom: -3 }}
+              color={color}
+            />
+          ),
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -61,15 +82,29 @@ export default function TabLayout() {
       <Tabs.Screen
         name="promotions"
         options={{
-          title: "Promotions",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <Ionicons
+              name="gift-outline"
+              size={22}
+              style={{ marginBottom: -3 }}
+              color={color}
+            />
+          ),
         }}
       />
       <Tabs.Screen
         name="map"
         options={{
-          title: "map",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <Feather
+              name="map"
+              size={22}
+              style={{ marginBottom: -3 }}
+              color={color}
+            />
+          ),
         }}
       />
     </Tabs>
