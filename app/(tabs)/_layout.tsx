@@ -2,6 +2,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
 import { Feather, AntDesign, Octicons, Ionicons } from "@expo/vector-icons";
 import { Pressable, useColorScheme } from "react-native";
+import React from 'react';
 
 import Colors from "../../constants/Colors";
 
