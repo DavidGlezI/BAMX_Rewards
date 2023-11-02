@@ -21,7 +21,7 @@ export default function ModalScreen() {
   const [isFocused2, setIsFocused2] = useState(false);
 
   const handleLogin = () => {
-    router.replace("/");
+    router.replace("/promotions");
     console.log(`Logging in with email: ${email} and password: ${password}`);
   };
 
@@ -32,8 +32,8 @@ export default function ModalScreen() {
         style={styles.image}
       />
       <View style={styles.loginContaier}>
-        <Text style={styles.title}>Iniciar sesión</Text>
-        <Text style={styles.subTitle}>o Únete a BAMX</Text>
+        <Text style={styles.title}  >Iniciar sesión</Text>
+        <Text style={styles.subTitle} onPress={() => router.replace("/register")}>o Únete a BAMX</Text>
         <TextInput
           placeholder="Correo Electrónico"
           value={email}
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     width: 240,
   },
   subTitle: {
-    marginTop: 5,
+    marginTop: 10,
     marginBottom: 60,
     fontSize: 14,
   },
