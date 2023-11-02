@@ -17,7 +17,9 @@ import Colors from "../constants/Colors";
 export default function ModalScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setNamw] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const [isFocused1, setIsFocused1] = useState(false);
   const [isFocused2, setIsFocused2] = useState(false);
 
   const handleLogin = () => {
@@ -32,8 +34,20 @@ export default function ModalScreen() {
         style={styles.image}
       />
       <View style={styles.loginContaier}>
-        <Text style={styles.title}>Iniciar sesión</Text>
-        <Text style={styles.subTitle}>o Únete a BAMX</Text>
+        <Text style={styles.title}>Registrate</Text>
+        <Text style={styles.subTitle}>o Iniciar sesión</Text>
+        <TextInput
+          placeholder="Nombre y Apellido
+          "
+          value={name}
+          onChangeText={(text) => setName(text)}
+          style={[
+            styles.input,
+            { borderColor: isFocused1 ? Colors["light"].tint : "#CCCCCC" },
+          ]}
+          onFocus={() => setIsFocused1(true)}
+          onBlur={() => setIsFocused1(false)}
+        />
         <TextInput
           placeholder="Correo Electrónico"
           value={email}
@@ -97,7 +111,7 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     marginTop: 5,
-    marginBottom: 60,
+    marginBottom: 30,
     fontSize: 14,
   },
   input: {
