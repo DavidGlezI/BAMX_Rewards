@@ -57,7 +57,10 @@ export function useUpdateCreate(url: string, payload: any) {
           API_BASE_URL + url + `/${id}`,
           payload,
           {
-            withCredentials: true,
+            headers: {
+              "x-api-key": API_KEY,
+              "Content-Type": "application/json",
+            },
           }
         );
         setResponse(response);

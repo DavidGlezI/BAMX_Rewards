@@ -5,7 +5,7 @@ import {
   Platform,
   TextInput,
   TouchableHighlight,
-  Button,
+  Animated,
   StyleSheet,
   Image,
   Dimensions,
@@ -28,6 +28,7 @@ export default function ModalScreen() {
     if (!loading && !error && response?.status === 200) {
       router.replace("/promotions");
     } else if (!loading && error) {
+      setPassword("");
     }
   }, [response, loading, error]);
 
@@ -71,6 +72,12 @@ export default function ModalScreen() {
         <TouchableHighlight style={styles.loginBtn} onPress={create}>
           <Text style={styles.buttonText}>Iniciar Sesión</Text>
         </TouchableHighlight>
+
+        {error && !isFocused && !isFocused2 && (
+          <Text style={styles.errorText}>
+            Credenciales incorrectas intente de nuevo
+          </Text>
+        )}
       </View>
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
@@ -80,6 +87,12 @@ export default function ModalScreen() {
 }
 
 const styles = StyleSheet.create({
+  errorText: {
+    color: "red",
+    textAlign: "center",
+    marginTop: 30,
+    fontWeight: "500",
+  },
   container: {
     flex: 1,
     alignItems: "center",
