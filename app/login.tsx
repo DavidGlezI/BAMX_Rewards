@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { router } from "expo-router";
 import {
@@ -9,8 +10,7 @@ import {
   Image,
   Dimensions,
 } from "react-native";
-import React, { useState } from "react";
-
+import { useUpdateCreate } from "../util/useApi";
 import { Text, View } from "../components/Themed";
 import Colors from "../constants/Colors";
 
@@ -19,11 +19,19 @@ export default function ModalScreen() {
   const [password, setPassword] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [isFocused2, setIsFocused2] = useState(false);
+  const { response, error, loading, create } = useUpdateCreate("user/login", {
+    user_email: email,
+    user_password: password,
+  });
 
-  const handleLogin = () => {
-    router.replace("/promotions");
-    console.log(`Logging in with email: ${email} and password: ${password}`);
-  };
+  useEffect(() => {
+    console.log(response);
+    console.log(loading);
+    console.log(error);
+    if (!loading && !error && response?.status === 200) {
+      router.replace("/promotions");
+    }
+  }, [response, loading]);
 
   return (
     <View style={styles.container}>
@@ -32,8 +40,13 @@ export default function ModalScreen() {
         style={styles.image}
       />
       <View style={styles.loginContaier}>
-        <Text style={styles.title}  >Iniciar sesión</Text>
-        <Text style={styles.subTitle} onPress={() => router.replace("/register")}>o Únete a BAMX</Text>
+        <Text style={styles.title}>Iniciar sesión</Text>
+        <Text
+          style={styles.subTitle}
+          onPress={() => router.replace("/register")}
+        >
+          o Únete a BAMX
+        </Text>
         <TextInput
           placeholder="Correo Electrónico"
           value={email}
@@ -57,7 +70,7 @@ export default function ModalScreen() {
           onBlur={() => setIsFocused(false)}
           secureTextEntry
         />
-        <TouchableHighlight style={styles.loginBtn} onPress={handleLogin}>
+        <TouchableHighlight style={styles.loginBtn} onPress={create}>
           <Text style={styles.buttonText}>Iniciar Sesión</Text>
         </TouchableHighlight>
       </View>

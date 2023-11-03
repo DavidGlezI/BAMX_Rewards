@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { router } from "expo-router";
 import {
@@ -9,7 +10,7 @@ import {
   Image,
   Dimensions,
 } from "react-native";
-import React, { useState } from "react";
+import { useUpdateCreate } from "../util/useApi";
 
 import { Text, View } from "../components/Themed";
 import Colors from "../constants/Colors";
@@ -17,15 +18,27 @@ import Colors from "../constants/Colors";
 export default function ModalScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setNamw] = useState("");
+  const [name, setName] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [isFocused1, setIsFocused1] = useState(false);
   const [isFocused2, setIsFocused2] = useState(false);
+  const { response, error, loading, create } = useUpdateCreate(
+    "user/register",
+    {
+      user_email: email,
+      username: name,
+      user_password: password,
+    }
+  );
 
-  const handleLogin = () => {
-    router.replace("/promotions");
-    console.log(`Logging in with email: ${email} and password: ${password}`);
-  };
+  useEffect(() => {
+    console.log(response);
+    console.log(loading);
+    console.log(error);
+    if (!loading && !error && response?.status === 200) {
+      router.replace("/promotions");
+    }
+  }, [response, loading]);
 
   return (
     <View style={styles.container}>
@@ -35,7 +48,9 @@ export default function ModalScreen() {
       />
       <View style={styles.loginContaier}>
         <Text style={styles.title}>Registrate</Text>
-        <Text style={styles.subTitle}  onPress={() => router.replace("/login")}>o Iniciar sesión</Text>
+        <Text style={styles.subTitle} onPress={() => router.replace("/login")}>
+          o Iniciar sesión
+        </Text>
         <TextInput
           placeholder="Nombre y Apellido
           "
@@ -71,7 +86,7 @@ export default function ModalScreen() {
           onBlur={() => setIsFocused(false)}
           secureTextEntry
         />
-        <TouchableHighlight style={styles.loginBtn} onPress={handleLogin}>
+        <TouchableHighlight style={styles.loginBtn} onPress={create}>
           <Text style={styles.buttonText}>Iniciar Sesión</Text>
         </TouchableHighlight>
       </View>
