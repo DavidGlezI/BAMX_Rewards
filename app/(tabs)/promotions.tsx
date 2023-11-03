@@ -1,6 +1,13 @@
 import React from "react";
 import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
 
+
+interface Rectangle {
+  id: string;
+  text: string;
+  image: any;
+}
+
 const images = [
   require("../../assets/images/QinLogo.png"),
   require("../../assets/images/CarlsLogo.png"),
@@ -11,7 +18,7 @@ const images = [
   require("../../assets/images/CarlsLogo.png"),
 ];
 
-const rectangles = [
+const rectangles: Rectangle[] = [
   {
     id: "1",
     text: "Promoción 1",
@@ -37,39 +44,92 @@ const rectangles = [
     text: "Promoción 5",
     image: require("../../assets/images/QinLogo.png"),
   },
+  {
+    id: "6",
+    text: "Promoción 6",
+    image: require("../../assets/images/QinLogo.png"),
+  },
+  {
+    id: "7",
+    text: "Promoción 7",
+    image: require("../../assets/images/QinLogo.png"),
+  },
+  {
+    id: "8",
+    text: "Promoción 8",
+    image: require("../../assets/images/QinLogo.png"),
+  },
+  {
+    id: "9",
+    text: "Promoción 9",
+    image: require("../../assets/images/QinLogo.png"),
+  },
+  {
+    id: "10",
+    text: "Promoción 10",
+    image: require("../../assets/images/QinLogo.png"),
+  },
+  {
+    id: "11",
+    text: "Promoción 11",
+    image: require("../../assets/images/QinLogo.png"),
+  },
+  {
+    id: "12",
+    text: "Promoción 12",
+    image: require("../../assets/images/QinLogo.png"),
+  },
 ];
 
 export default function TabPromotionsScreen() {
-  const row1 = rectangles.filter((_, index) => index % 2 === 0);
-  const row2 = rectangles.filter((_, index) => index % 2 === 1);
+  const half = Math.ceil(rectangles.length / 2);
+  const firstRowRectangles = rectangles.slice(0, half);
+  const secondRowRectangles = rectangles.slice(half);
+
+  const renderRectangle = (item: Rectangle) => (
+    <View style={styles.rectangle} key={item.id}>
+      <Image source={item.image} style={styles.rectangleImage} />
+      <Text style={styles.rectangleText}>{item.text}</Text>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
       <Text style={styles.establecimientosTitle}>ESTABLECIMIENTOS</Text>
-      <ScrollView horizontal={true} contentContainerStyle={styles.circlesContainer}>
+      <ScrollView
+        horizontal={true}
+        contentContainerStyle={styles.circlesContainer}
+        showsHorizontalScrollIndicator={false}
+      >
         {images.map((image, index) => (
-          <View key={index} style={styles.circle}>
+          <View key={String(index)} style={styles.circle}>
             <Image source={image} style={styles.image} />
           </View>
         ))}
       </ScrollView>
       <Text style={styles.promocionesTitle}>PROMOCIONES</Text>
-      <ScrollView horizontal={true} contentContainerStyle={styles.rectanglesContainer}>
-        <View style={styles.row}>
-          {row1.map((item) => (
-            <View key={item.id} style={styles.rectangle}>
-              <Image source={item.image} style={styles.rectangleImage} />
-              <Text style={styles.rectangleText}>{item.text}</Text>
-            </View>
-          ))}
+      <ScrollView
+        horizontal={true}
+        contentContainerStyle={styles.smallCirclesContainer}
+        showsHorizontalScrollIndicator={false}
+      >
+        {images.map((image, index) => (
+          <View key={`small-${index}`} style={styles.smallCircle}>
+            <Image source={image} style={styles.smallImage} />
+          </View>
+        ))}
+      </ScrollView>
+
+      <ScrollView
+        horizontal={true}
+        contentContainerStyle={styles.promotionsContainer}
+        showsHorizontalScrollIndicator={false}
+      >
+        <View style={styles.promotionsRow}>
+          {firstRowRectangles.map(renderRectangle)}
         </View>
-        <View style={styles.row}>
-          {row2.map((item) => (
-            <View key={item.id} style={styles.rectangle}>
-              <Image source={item.image} style={styles.rectangleImage} />
-              <Text style={styles.rectangleText}>{item.text}</Text>
-            </View>
-          ))}
+        <View style={styles.promotionsRow}>
+          {secondRowRectangles.map(renderRectangle)}
         </View>
       </ScrollView>
     </View>
@@ -90,6 +150,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignSelf: "flex-start",
     marginLeft: 30,
+    marginBottom: 10,
   },
   establecimientosTitle: {
     color: "#BBB",
@@ -97,6 +158,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     textAlign: "left",
     marginBottom: 10,
+    marginTop: 20,
     alignSelf: "flex-start",
     marginLeft: 30,
   },
@@ -125,18 +187,14 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  rectanglesContainer: {
-    flexDirection: 'row',
-  },
-  row: {
-    flexDirection: 'column',
-  },
   rectangle: {
     backgroundColor: "#FFF",
-    borderRadius: 10,
+    borderRadius: 20,
     padding: 10,
-    margin: 5,
-    width: 100,
+    flexShrink: 0,
+    margin: 10,
+    width: 106,
+    height: 160,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
@@ -158,5 +216,34 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
     textAlign: "center",
+  },
+  promotionsRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  promotionsContainer: {
+    flexDirection: "column",
+  },
+  smallCirclesContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 10, 
+  },
+  smallCircle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: "#FFF",
+    flexShrink: 0,
+    margin: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: "hidden",
+  },
+  smallImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: 'contain',
   },
 });
