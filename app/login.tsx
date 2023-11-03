@@ -25,13 +25,11 @@ export default function ModalScreen() {
   });
 
   useEffect(() => {
-    console.log(response);
-    console.log(loading);
-    console.log(error);
     if (!loading && !error && response?.status === 200) {
       router.replace("/promotions");
+    } else if (!loading && error) {
     }
-  }, [response, loading]);
+  }, [response, loading, error]);
 
   return (
     <View style={styles.container}>
