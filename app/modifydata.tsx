@@ -26,7 +26,7 @@ export default function ModalScreen() {
   const [isFocused1, setIsFocused1] = useState(false);
   const [isFocused2, setIsFocused2] = useState(false);
 
-  const {data, error:aserror2, loading:loading2, setData, fetch } = useFetch(
+  const {data, error:error2, loading:loading2, setData, fetch } = useFetch(
     "user"
   );
   const { response, error, loading, update} = useUpdateCreate(
@@ -44,12 +44,8 @@ export default function ModalScreen() {
 
   useEffect(() => {
     if(data && !error && !loading) {
-
-      console.log(data?.email)
       setEmail(data?.email)
-      console.log(email)
-      setName(data?.name)
-      console.log(name)
+      setName(data?.nombre)
     }
     
   }, [loading, data])
@@ -57,7 +53,7 @@ export default function ModalScreen() {
   return (
     <View style={styles.container}>
       {
-        loading ? <ActivityIndicator size="large" color={Colors["light"].tint} />: error ? <Text>Error</Text>:<>
+        loading || loading2 ? <ActivityIndicator size="large" color={Colors["light"].tint} />: error2 || error ? <Text>Error</Text>:<>
       <Image
         source={require("../assets/images/background2.png")} // Troll 
         style={styles.image}
@@ -67,6 +63,7 @@ export default function ModalScreen() {
 
         <Text style={styles.infoTitle}>Nombre y Apellido*</Text>
         <TextInput
+        placeholder={name}
           value={name}
           onChangeText={(text) => setName(text)}
           style={[
@@ -79,7 +76,7 @@ export default function ModalScreen() {
        
         <Text style={styles.infoTitle}>Correo Electrónico*</Text>
         <TextInput
-          placeholder={data}
+          placeholder={email}
           value={email}
           onChangeText={(text) => setEmail(text)}
           style={[
@@ -129,7 +126,6 @@ export default function ModalScreen() {
 
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
