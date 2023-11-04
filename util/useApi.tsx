@@ -66,6 +66,7 @@ export function useUpdateCreate(url: string, payload: any) {
   const update = useCallback(
     async (id: string | Number) => {
       try {
+        const jwtToken = await getValueFor("access-token");
         setLoading(true);
         const response = await axios.patch(
           API_BASE_URL + url + `/${id}`,
@@ -73,6 +74,7 @@ export function useUpdateCreate(url: string, payload: any) {
           {
             headers: {
               "x-api-key": API_KEY,
+              "access-token": jwtToken,
               "Content-Type": "application/json",
             },
           }

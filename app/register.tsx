@@ -87,7 +87,7 @@ export default function ModalScreen() {
           secureTextEntry
         />
         <TouchableHighlight style={styles.loginBtn} onPress={create}>
-          <Text style={styles.buttonText}>Iniciar Sesión</Text>
+          <Text style={styles.buttonText}>Continuar</Text>
         </TouchableHighlight>
       </View>
 
