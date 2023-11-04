@@ -69,10 +69,10 @@ export default function TabAccountScreen() {
           <Text style={styles.title}>Mi cuenta</Text>
   
           <Text style={styles.infoTitle}>Nombre y Apellido*</Text>
-          <Text style={styles.infoCuenta}>{userData?.nombre}</Text> 
+          <Text style={styles.infoCuenta}>{userData?.user_name}</Text> 
          
           <Text style={styles.infoTitle}>Correo Electrónico*</Text>
-          <Text style={styles.infoCuenta}>{userData?.email}</Text> 
+          <Text style={styles.infoCuenta}>{userData?.user_email}</Text> 
   
           <Text style={styles.infoTitle}>Contraseña*</Text>
           <Text style={styles.infoCuenta}>******</Text> 
