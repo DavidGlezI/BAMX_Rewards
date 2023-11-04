@@ -36,7 +36,7 @@ export default function ModalScreen() {
     console.log(loading);
     console.log(error);
     if (!loading && !error && response?.status === 201) {
-      router.replace("/promotions");
+      router.replace("/login");
     }
   }, [response, loading]);
 

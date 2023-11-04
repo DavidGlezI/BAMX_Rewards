@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { router } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 import {
   Platform,
   TextInput,
@@ -14,6 +15,11 @@ import { useUpdateCreate } from "../util/useApi";
 import { Text, View } from "../components/Themed";
 import Colors from "../constants/Colors";
 
+async function save(key: string, value: any) {
+  await SecureStore.setItemAsync(key, value);
+  console.log(value);
+}
+
 export default function ModalScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,6 +32,8 @@ export default function ModalScreen() {
 
   useEffect(() => {
     if (!loading && !error && response?.status === 200) {
+      console.log(response);
+      save("access-token", response.data["access-token"]);
       router.replace("/promotions");
     } else if (!loading && error) {
       setPassword("");
@@ -129,7 +137,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginBottom: 12,
     paddingLeft: 8,
-    outlineStyle: "none",
   },
   loginContaier: {
     padding: 40,
