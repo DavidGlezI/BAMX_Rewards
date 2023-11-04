@@ -11,76 +11,100 @@ import {
   Image,
   Dimensions,
 } from "react-native";
-import { Text, View } from "../../components/Themed";
-import Colors from "../../constants/Colors"
-import { useFetch } from "../../util/useApi";
+import { Text, View } from "../components/Themed";
+import Colors from "../constants/Colors"
+import { useUpdateCreate, useFetch } from "../util/useApi";
 
 
-
-interface DonationProps{
-  id: string;
-  cantidad: string;
-};
-
-const Donations: React.FC<DonationProps> = ({id, cantidad}) =>{
-  
-  return (
-    <View style= {styles.donation}>
-      <Text style= {styles.subTitle}>Donación</Text>
-      <Text style= {styles.infoDonacion}>ID: {id}</Text>
-      <Text style= {styles.infoDonacion}>Cantidad: $ {cantidad} pesos</Text>
-      <View style = {styles.borderBottom}/>
-    </View>
-  );
-};
 
 
 export default function TabAccountScreen() {
 
-
-  const {data, error, loading, setData } = useFetch(
-    "donations"
-  );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [name, setName] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [isFocused1, setIsFocused1] = useState(false);
   const [isFocused2, setIsFocused2] = useState(false);
+
+
+  const {data, error:aserror2, loading:loading2, setData } = useFetch(
+    "user"
+  );
+  const { response, error, loading, update} = useUpdateCreate(
+    "user/",
+    {
+      user_email: email,
+      username: name,
+      user_password: newPassword,
+    }
+  );
   return (
     <View style={styles.container}>
       
       <Image
-        source={require("../../assets/images/background2.png")} // Troll 
+        source={require("../assets/images/background2.png")} // Troll 
         style={styles.image}
       />
       <View style={styles.loginContaier}>
-        <Text style={styles.title}>Mi cuenta</Text>
+        <Text style={styles.title}>Modificar mis datos</Text>
 
         <Text style={styles.infoTitle}>Nombre y Apellido*</Text>
-        <Text style={styles.infoCuenta}>Mateo Bernasconi</Text> 
+        <TextInput
+          placeholder={data}
+          value={name}
+          onChangeText={(text) => setName(text)}
+          style={[
+            styles.input,
+            { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
+          ]}
+          onFocus={() => setIsFocused2(true)}
+          onBlur={() => setIsFocused2(false)}
+        />
        
         <Text style={styles.infoTitle}>Correo Electrónico*</Text>
-        <Text style={styles.infoCuenta}>mateobernasconi@gmail.com</Text> 
+        <TextInput
+          placeholder={data}
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          style={[
+            styles.input,
+            { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
+          ]}
+          onFocus={() => setIsFocused2(true)}
+          onBlur={() => setIsFocused2(false)}
+        />
 
         <Text style={styles.infoTitle}>Contraseña*</Text>
-        <Text style={styles.infoCuenta}>******</Text> 
+        <TextInput
+          placeholder="Nueva Contraseña"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+          style={[
+            styles.input,
+            { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
+          ]}
+          onFocus={() => setIsFocused2(true)}
+          onBlur={() => setIsFocused2(false)}
+        /> 
 
-        <TouchableHighlight style={styles.loginBtn} onPress={()=>{router.replace("/modifyData");}}>
-          <Text style={styles.buttonText}>Modificar</Text>
+        <Text style={styles.infoTitle}>Confirmar Contraseña*</Text>
+        <TextInput
+          placeholder="Confirmar Nueva Contraseña"
+          value={newPassword}
+          onChangeText={(text) => setNewPassword(text)}
+          style={[
+            styles.input,
+            { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
+          ]}
+          onFocus={() => setIsFocused2(true)}
+          onBlur={() => setIsFocused2(false)}
+        />
+
+        <TouchableHighlight style={styles.loginBtn} onPress={() => password === newPassword ? update : console.log("Not the same")}>
+          <Text style={styles.buttonText}>Guardar</Text>
         </TouchableHighlight>
-
-      </View>
-
-
-      <View style = {styles.loginContaier2}>
-        <View style = {styles.donation}>
-          <Text style={styles.title2}>Historial</Text>
-          <View style = {styles.borderBottom}/>
-          <Donations id = {"5"} cantidad = {"70"}/>
-          <Donations id = {"5"} cantidad = {"70"}/>
-          <Donations id = {"5"} cantidad = {"70"}/>
-        </View>
 
       </View>
 
@@ -96,8 +120,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    gap: 20,
-    justifyContent: "flex-end",
+    justifyContent: "center",
     marginBottom: 30,
     position: "relative",
   },

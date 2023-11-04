@@ -26,6 +26,7 @@ export default function ModalScreen() {
 
   useEffect(() => {
     if (!loading && !error && response?.status === 200) {
+      localStorage.setItem("access-token", response.data["access-token"])
       router.replace("/promotions");
     } else if (!loading && error) {
     }

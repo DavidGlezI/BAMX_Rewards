@@ -12,10 +12,16 @@ export function useFetch(url: string) {
       try {
         setLoading(true);
         const response = await axios.get(API_BASE_URL + url, {
-          withCredentials: true,
+          headers:{
+            "access-token" : localStorage.getItem("access-token"),
+            "x-api-key": API_KEY,
+          },
         });
         setData(response.data);
+        console.log(response)
+        console.log(response.data)
       } catch (err: any) {
+        console.log(err)
         setError(err);
       } finally {
         setLoading(false);
@@ -49,14 +55,39 @@ export function useUpdateCreate(url: string, payload: any) {
     }
   }, [url, payload]);
 
+
+  const logCreate = useCallback(async () => {
+    try {
+      setError(null);
+      setLoading(true);
+      const response = await axios.post(API_BASE_URL + url, payload, {
+        headers: {
+          "x-api-key": API_KEY,
+          "Content-Type": "application/json",
+          "access-token" : localStorage.getItem("access-token")
+        },
+      });
+      setResponse(response);
+    } catch (err: any) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [url, payload]);
+
   const update = useCallback(
-    async (id: string | Number) => {
+    async () => {
       try {
         setLoading(true);
         const response = await axios.patch(
-          API_BASE_URL + url + `/${id}`,
+          API_BASE_URL + url,
           payload,
           {
+            headers: {
+              "x-api-key": API_KEY,
+              "Content-Type": "application/json",
+              "access-token" : localStorage.getItem("access-token")
+            },
             withCredentials: true,
           }
         );
@@ -70,5 +101,5 @@ export function useUpdateCreate(url: string, payload: any) {
     [url, payload]
   );
 
-  return { response, error, loading, create, update };
+  return { response, error, loading, create, update, useFetch };
 }
