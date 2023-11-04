@@ -17,7 +17,6 @@ import Colors from "../constants/Colors";
 
 async function save(key: string, value: any) {
   await SecureStore.setItemAsync(key, value);
-  console.log(value);
 }
 
 export default function ModalScreen() {
@@ -32,7 +31,7 @@ export default function ModalScreen() {
 
   useEffect(() => {
     if (!loading && !error && response?.status === 200) {
-      console.log(response);
+      console.log(response.data["access-token"]);
       save("access-token", response.data["access-token"]);
       router.replace("/promotions");
     } else if (!loading && error) {

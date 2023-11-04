@@ -1,6 +1,16 @@
-import React from "react";
-import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
-
+import React, { useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  RefreshControl,
+  ActivityIndicator,
+} from "react-native";
+import { useFetch } from "../../util/useApi";
+import Colors from "../../constants/Colors";
 
 interface Rectangle {
   id: string;
@@ -85,6 +95,7 @@ export default function TabPromotionsScreen() {
   const half = Math.ceil(rectangles.length / 2);
   const firstRowRectangles = rectangles.slice(0, half);
   const secondRowRectangles = rectangles.slice(half);
+  const { data, error, loading, fetch } = useFetch("restaurants");
 
   const renderRectangle = (item: Rectangle) => (
     <View style={styles.rectangle} key={item.id}>
@@ -93,46 +104,66 @@ export default function TabPromotionsScreen() {
     </View>
   );
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.establecimientosTitle}>ESTABLECIMIENTOS</Text>
-      <ScrollView
-        horizontal={true}
-        contentContainerStyle={styles.circlesContainer}
-        showsHorizontalScrollIndicator={false}
-      >
-        {images.map((image, index) => (
-          <View key={String(index)} style={styles.circle}>
-            <Image source={image} style={styles.image} />
-          </View>
-        ))}
-      </ScrollView>
-      <Text style={styles.promocionesTitle}>PROMOCIONES</Text>
-      <ScrollView
-        horizontal={true}
-        contentContainerStyle={styles.smallCirclesContainer}
-        showsHorizontalScrollIndicator={false}
-      >
-        {images.map((image, index) => (
-          <View key={`small-${index}`} style={styles.smallCircle}>
-            <Image source={image} style={styles.smallImage} />
-          </View>
-        ))}
-      </ScrollView>
+  useEffect(() => {
+    fetch();
+  }, []);
 
+  return (
+    <SafeAreaView style={styles.container}>
       <ScrollView
-        horizontal={true}
-        contentContainerStyle={styles.promotionsContainer}
-        showsHorizontalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={fetch} />
+        }
       >
-        <View style={styles.promotionsRow}>
-          {firstRowRectangles.map(renderRectangle)}
-        </View>
-        <View style={styles.promotionsRow}>
-          {secondRowRectangles.map(renderRectangle)}
-        </View>
+        {error ? (
+          <Text>Sorry there was an error loading your data</Text>
+        ) : loading ? (
+          <ActivityIndicator size="large" color={Colors["light"].tint} />
+        ) : (
+          data && (
+            <>
+              <Text style={styles.establecimientosTitle}>ESTABLECIMIENTOS</Text>
+              <ScrollView
+                horizontal={true}
+                contentContainerStyle={styles.circlesContainer}
+                showsHorizontalScrollIndicator={false}
+              >
+                {images.map((image, index) => (
+                  <View key={String(index)} style={styles.circle}>
+                    <Image source={image} style={styles.image} />
+                  </View>
+                ))}
+              </ScrollView>
+              <Text style={styles.promocionesTitle}>PROMOCIONES</Text>
+              <ScrollView
+                horizontal={true}
+                contentContainerStyle={styles.smallCirclesContainer}
+                showsHorizontalScrollIndicator={false}
+              >
+                {images.map((image, index) => (
+                  <View key={`small-${index}`} style={styles.smallCircle}>
+                    <Image source={image} style={styles.smallImage} />
+                  </View>
+                ))}
+              </ScrollView>
+
+              <ScrollView
+                horizontal={true}
+                contentContainerStyle={styles.promotionsContainer}
+                showsHorizontalScrollIndicator={false}
+              >
+                <View style={styles.promotionsRow}>
+                  {firstRowRectangles.map(renderRectangle)}
+                </View>
+                <View style={styles.promotionsRow}>
+                  {secondRowRectangles.map(renderRectangle)}
+                </View>
+              </ScrollView>
+            </>
+          )
+        )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -228,7 +259,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 10, 
+    paddingVertical: 10,
   },
   smallCircle: {
     width: 24,
@@ -237,13 +268,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     flexShrink: 0,
     margin: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     overflow: "hidden",
   },
   smallImage: {
     width: "100%",
     height: "100%",
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
 });

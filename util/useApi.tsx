@@ -1,29 +1,43 @@
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { API_BASE_URL, API_KEY } from "@env";
+import * as SecureStore from "expo-secure-store";
+
+async function getValueFor(key: string) {
+  let result = await SecureStore.getItemAsync(key);
+  if (result) {
+    return result;
+  } else {
+    alert("No values stored under that key.");
+  }
+}
 
 export function useFetch(url: string) {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<any>(null);
   const [loading, setLoading] = useState<any>(false);
 
-  useEffect(() => {
-    (async function () {
-      try {
-        setLoading(true);
-        const response = await axios.get(API_BASE_URL + url, {
-          withCredentials: true,
-        });
-        setData(response.data);
-      } catch (err: any) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [url]);
+  const fetch = useCallback(async () => {
+    try {
+      setLoading(true);
+      const jwtToken = await getValueFor("access-token");
+      const response = await axios.get(API_BASE_URL + url, {
+        headers: {
+          "x-api-key": API_KEY,
+          "access-token": jwtToken,
+          "Content-Type": "application/json",
+        },
+      });
+      setData(response.data);
+    } catch (err: any) {
+      alert(err);
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  return { data, error, loading, setData };
+  return { data, error, loading, setData, fetch };
 }
 
 export function useUpdateCreate(url: string, payload: any) {
