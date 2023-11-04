@@ -90,7 +90,7 @@ export default function TabAccountScreen() {
             <View style = {styles.borderBottom}/>
             {data?.map((d) => (
   
-            <Donations key={d?.id_donacion} id = {d?.id_donacion} cantidad = {d?.cantidad}/>
+            <Donations key={d?.donation_id} id = {d?.donation_id} cantidad = {d?.donation_quantity}/>
             ))}
            
           </View>

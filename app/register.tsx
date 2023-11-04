@@ -26,7 +26,7 @@ export default function ModalScreen() {
     "user/register",
     {
       user_email: email,
-      username: name,
+      user_name: name,
       user_password: password,
     }
   );

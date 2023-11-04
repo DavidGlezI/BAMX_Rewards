@@ -33,7 +33,7 @@ export default function ModalScreen() {
     "user/",
     {
       user_email: email,
-      username: name,
+      user_name: name,
       user_password: newPassword,
     }
   );
@@ -45,7 +45,7 @@ export default function ModalScreen() {
   useEffect(() => {
     if(data && !error && !loading) {
       setEmail(data?.email)
-      setName(data?.nombre)
+      setName(data?.name)
     }
     
   }, [loading, data])
