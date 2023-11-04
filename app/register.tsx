@@ -134,7 +134,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginBottom: 12,
     paddingLeft: 8,
-    outlineStyle: "none",
   },
   loginContaier: {
     padding: 40,
