@@ -28,6 +28,7 @@ export function useFetch(url: string) {
           "Content-Type": "application/json",
         },
       });
+      console.log(response.data)
       setData(response.data);
     } catch (err: any) {
       alert(err);
@@ -64,12 +65,12 @@ export function useUpdateCreate(url: string, payload: any) {
   }, [url, payload]);
 
   const update = useCallback(
-    async (id: string | Number) => {
+    async () => {
       try {
         const jwtToken = await getValueFor("access-token");
         setLoading(true);
         const response = await axios.patch(
-          API_BASE_URL + url + `/${id}`,
+          API_BASE_URL + url,
           payload,
           {
             headers: {
