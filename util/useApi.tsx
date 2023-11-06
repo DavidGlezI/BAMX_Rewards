@@ -19,6 +19,7 @@ export function useFetch(url: string) {
 
   const fetch = useCallback(async () => {
     try {
+      setError(null);
       setLoading(true);
       const jwtToken = await getValueFor("access-token");
       const response = await axios.get(API_BASE_URL + url, {
@@ -31,6 +32,7 @@ export function useFetch(url: string) {
       setData(response.data);
     } catch (err: any) {
       alert(err);
+      console.log(err);
       setError(err);
     } finally {
       setLoading(false);
@@ -66,6 +68,7 @@ export function useUpdateCreate(url: string, payload: any) {
 
   const update = useCallback(async () => {
     try {
+      setError(null);
       const jwtToken = await getValueFor("access-token");
       setLoading(true);
       const response = await axios.patch(API_BASE_URL + url, payload, {
