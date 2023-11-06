@@ -18,11 +18,12 @@ export function useFetch(url: string) {
   const [loading, setLoading] = useState<any>(false);
 
   const fetch = useCallback(async () => {
+    console.log(`Calling fetch function to ${url}`);
     try {
       setError(null);
       setLoading(true);
       const jwtToken = await getValueFor("access-token");
-  
+
       const response = await axios.get(API_BASE_URL + url, {
         headers: {
           "x-api-key": API_KEY,
@@ -50,11 +51,9 @@ export function useUpdateCreate(url: string, payload: any) {
 
   const create = useCallback(async () => {
     try {
+      console.log(`Calling post function to ${url} with payload: ${payload}`);
       setError(null);
       setLoading(true);
-      console.log(payload)
-      console.log(API_BASE_URL + url)
-      console.log(API_KEY)
       const response = await axios.post(API_BASE_URL + url, payload, {
         headers: {
           "x-api-key": API_KEY,
@@ -62,7 +61,7 @@ export function useUpdateCreate(url: string, payload: any) {
         },
       });
       setResponse(response);
-    } catch (err: any) {    
+    } catch (err: any) {
       console.log(err);
       setError(err);
     } finally {
@@ -72,6 +71,7 @@ export function useUpdateCreate(url: string, payload: any) {
 
   const update = useCallback(async () => {
     try {
+      console.log(`Calling patch function to ${url} with payload: ${payload}`);
       setError(null);
       const jwtToken = await getValueFor("access-token");
       setLoading(true);

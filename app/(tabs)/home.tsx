@@ -13,7 +13,6 @@ import {
 import { useFetch } from "../../util/useApi";
 import Colors from "../../constants/Colors";
 
-
 interface Rectangle {
   id: string;
   mainText: string;
@@ -25,7 +24,7 @@ interface Rectangle {
 const images = [
   require("../../assets/images/QinLogo.png"),
   require("../../assets/images/CarlsLogo.png"),
-  require("../../assets/images/QinLogo.png"),
+  require("../../assets/images/CinepolisLogo.png"),
   require("../../assets/images/QinLogo.png"),
   require("../../assets/images/CarlsLogo.png"),
   require("../../assets/images/QinLogo.png"),
@@ -38,35 +37,35 @@ const rectangles: Rectangle[] = [
     mainText: "Combo Infantil",
     discountText: "20 % descuento",
     pointsText: "25 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    image: require("../../assets/images/ComboInfantil.png"),
   },
   {
     id: "2",
     mainText: "Refresco Refill",
     discountText: "Gratis",
     pointsText: "15 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    image: require("../../assets/images/CarlsRefresco.png"),
   },
   {
     id: "3",
-    mainText: "Papas Chicas",
+    mainText: "Palomitas Grandes",
     discountText: "10 % descuento",
-    pointsText: "45 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    pointsText: "35 puntos",
+    image: require("../../assets/images/CinepolisPalomitas.png"),
   },
   {
     id: "4",
-    mainText: "Combo Amigos",
+    mainText: "Minibox",
     discountText: "20 % descuento",
     pointsText: "30 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    image: require("../../assets/images/Mini-Box.png"),
   },
   {
     id: "5",
-    mainText: "Minibox",
-    discountText: "20 % descuento",
-    pointsText: "25 puntos",
-    image: require("../../assets/images/Mini-Box.png"),
+    mainText: "Western Bacon",
+    discountText: "10 % descuento",
+    pointsText: "30 puntos",
+    image: require("../../assets/images/CarlsWestern.png"),
   },
   {
     id: "6",
@@ -155,29 +154,34 @@ export default function TabHomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderImage /> 
-      
+      <HeaderImage />
+
       <ScrollView
-        style={{ marginTop: 160 }} 
         // scrollEnabled={false}
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={fetch} />
         }
       >
         {error ? (
-          <Text>Sorry there was an error loading your data</Text>
+          <Text style={{ marginTop: 190 }}>
+            Sorry there was an error loading your data
+          </Text>
         ) : loading ? (
-          <ActivityIndicator size="large" color={Colors["light"].tint} />
+          <ActivityIndicator
+            style={{ marginTop: 190 }}
+            size="large"
+            color={Colors["light"].tint}
+          />
         ) : (
           data && (
             <>
-              <View style={styles.card}>
+              <View style={{ ...styles.card, marginTop: 170 }}>
                 <View style={styles.contentWrapper}>
                   <Text style={styles.cardText}>Tarjeta</Text>
                   <View style={styles.circleWrapper}>
                     <View style={styles.circleWhite}>
                       <View style={styles.circleRed}>
-                        <Image source={require('../../assets/images/qr.png')} />
+                        <Image source={require("../../assets/images/qr.png")} />
                       </View>
                     </View>
                     <Text style={styles.pointsText}>200 pnts</Text>
@@ -197,11 +201,13 @@ export default function TabHomeScreen() {
                     )}
                   </View>
                 </View>
-              </ScrollView> 
+              </ScrollView>
 
               <Text style={styles.donacionesTitle}>DONACIONES</Text>
               <View style={styles.rect}>
-                <Text style={styles.mainText}>Tu donación marca la diferencia</Text>
+                <Text style={styles.mainText}>
+                  Tu donación marca la diferencia
+                </Text>
                 <Text style={styles.subText}>¡Únete para cambiar vidas!</Text>
                 <View style={styles.donationContainer}>
                   <View style={styles.circle_border}>
@@ -301,7 +307,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 4,
     elevation: 4,
-    marginLeft: 30
+    marginLeft: 30,
   },
   mainText: {
     fontSize: 14,
@@ -309,29 +315,29 @@ const styles = StyleSheet.create({
   },
   subText: {
     fontSize: 12,
-    color: 'red',
+    color: "red",
     marginTop: 2,
-    marginBottom: 6
+    marginBottom: 6,
   },
   donationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 2,
   },
   circle_border: {
     width: 35,
     height: 35,
     borderRadius: 20,
-    borderColor: 'red',
+    borderColor: "red",
     borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginLeft: 10,
   },
   circleNum: {
     fontSize: 16,
-    color: 'red',
-    fontWeight: '500',
+    color: "red",
+    fontWeight: "500",
   },
   card: {
     backgroundColor: "#FFF",
@@ -341,6 +347,7 @@ const styles = StyleSheet.create({
     margin: 10,
     width: 335,
     height: 60,
+    zIndex: 3,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "rgba(0, 0, 0, 0.1)",
@@ -348,25 +355,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 4,
     elevation: 4,
-    marginLeft: 30
+    marginLeft: 30,
   },
   contentWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   circleWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   circleWhite: {
     width: 85,
     height: 85,
     borderRadius: 40,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
     shadowColor: "rgba(0, 0, 0, 0.1)",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
@@ -376,21 +383,21 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 35,
-    backgroundColor: 'red',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "red",
+    alignItems: "center",
+    justifyContent: "center",
   },
   cardText: {
     fontSize: 10,
-    color: 'black',
-    fontWeight: 'bold',
-    marginRight: 15
+    color: "black",
+    fontWeight: "bold",
+    marginRight: 15,
   },
   pointsText: {
     fontSize: 10,
-    color: 'red',
-    fontWeight: 'bold',
-    marginLeft: 15
+    color: "red",
+    fontWeight: "bold",
+    marginLeft: 15,
   },
   circlesContainer: {
     flexDirection: "row",
@@ -434,10 +441,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   rectangleImage: {
-    width: 50,
-    height: 50,
+    width: 89.011,
+    height: 88,
     borderRadius: 25,
-    marginBottom: 10,
   },
   rectangleText: {
     fontSize: 16,
@@ -476,8 +482,8 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   smallImage: {
-    width: "100%",
-    height: "100%",
+    width: 20,
+    height: 20,
     resizeMode: "contain",
   },
   rectangleTextMain: {

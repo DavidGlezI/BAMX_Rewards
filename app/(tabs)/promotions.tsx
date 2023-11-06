@@ -24,7 +24,7 @@ interface Rectangle {
 const images = [
   require("../../assets/images/QinLogo.png"),
   require("../../assets/images/CarlsLogo.png"),
-  require("../../assets/images/QinLogo.png"),
+  require("../../assets/images/CinepolisLogo.png"),
   require("../../assets/images/QinLogo.png"),
   require("../../assets/images/CarlsLogo.png"),
   require("../../assets/images/QinLogo.png"),
@@ -37,21 +37,21 @@ const rectangles: Rectangle[] = [
     mainText: "Combo Infantil",
     discountText: "20 % descuento",
     pointsText: "25 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    image: require("../../assets/images/ComboInfantil.png"),
   },
   {
     id: "2",
     mainText: "Refresco Refill",
     discountText: "Gratis",
     pointsText: "15 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    image: require("../../assets/images/CarlsRefresco.png"),
   },
   {
     id: "3",
-    mainText: "Papas Chicas",
+    mainText: "Palomitas Grandes",
     discountText: "10 % descuento",
-    pointsText: "45 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    pointsText: "35 puntos",
+    image: require("../../assets/images/CinepolisPalomitas.png"),
   },
   {
     id: "4",
@@ -76,17 +76,17 @@ const rectangles: Rectangle[] = [
   },
   {
     id: "7",
-    mainText: "Combo Infantil",
+    mainText: "Minibox",
     discountText: "20 % descuento",
     pointsText: "25 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    image: require("../../assets/images/Mini-Box.png"),
   },
   {
     id: "8",
-    mainText: "Combo Infantil",
-    discountText: "20 % descuento",
-    pointsText: "25 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    mainText: "Western Bacon",
+    discountText: "10 % descuento",
+    pointsText: "30 puntos",
+    image: require("../../assets/images/CarlsWestern.png"),
   },
   {
     id: "9",
@@ -154,23 +154,30 @@ export default function TabPromotionsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderImage /> 
-      
+      <HeaderImage />
+
       <ScrollView
-        style={{ marginTop: 160 }} 
         // scrollEnabled={false}
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={fetch} />
         }
       >
         {error ? (
-          <Text>Sorry there was an error loading your data</Text>
+          <Text style={{ marginTop: 160 }}>
+            Sorry there was an error loading your data
+          </Text>
         ) : loading ? (
-          <ActivityIndicator size="large" color={Colors["light"].tint} />
+          <ActivityIndicator
+            style={{ marginTop: 160 }}
+            size="large"
+            color={Colors["light"].tint}
+          />
         ) : (
           data && (
             <>
-              <Text style={styles.establecimientosTitle}>ESTABLECIMIENTOS</Text>
+              <Text style={{ ...styles.establecimientosTitle, marginTop: 190 }}>
+                ESTABLECIMIENTOS
+              </Text>
               <ScrollView
                 horizontal={true}
                 contentContainerStyle={styles.circlesContainer}
@@ -260,6 +267,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+    resizeMode: "contain",
   },
   rectangle: {
     backgroundColor: "#FFF",
@@ -282,10 +290,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   rectangleImage: {
-    width: 50,
-    height: 50,
+    width: 85,
+    height: 85,
     borderRadius: 25,
-    marginBottom: 10,
   },
   rectangleText: {
     fontSize: 16,
@@ -324,8 +331,8 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   smallImage: {
-    width: "100%",
-    height: "100%",
+    width: 20,
+    height: 20,
     resizeMode: "contain",
   },
   rectangleTextMain: {

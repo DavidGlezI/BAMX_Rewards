@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     overflow: "hidden",
+    alignSelf: "center",
     zIndex: 0,
     minWidth: Dimensions.get("window").width,
     height: Dimensions.get("window").height / 3,
