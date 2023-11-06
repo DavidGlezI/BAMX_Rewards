@@ -28,7 +28,6 @@ export function useFetch(url: string) {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data)
       setData(response.data);
     } catch (err: any) {
       alert(err);
@@ -58,37 +57,31 @@ export function useUpdateCreate(url: string, payload: any) {
       });
       setResponse(response);
     } catch (err: any) {
+      console.log(err);
       setError(err);
     } finally {
       setLoading(false);
     }
   }, [url, payload]);
 
-  const update = useCallback(
-    async () => {
-      try {
-        const jwtToken = await getValueFor("access-token");
-        setLoading(true);
-        const response = await axios.patch(
-          API_BASE_URL + url,
-          payload,
-          {
-            headers: {
-              "x-api-key": API_KEY,
-              "access-token": jwtToken,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        setResponse(response);
-      } catch (err: any) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [url, payload]
-  );
+  const update = useCallback(async () => {
+    try {
+      const jwtToken = await getValueFor("access-token");
+      setLoading(true);
+      const response = await axios.patch(API_BASE_URL + url, payload, {
+        headers: {
+          "x-api-key": API_KEY,
+          "access-token": jwtToken,
+          "Content-Type": "application/json",
+        },
+      });
+      setResponse(response);
+    } catch (err: any) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [url, payload]);
 
   return { response, error, loading, create, update };
 }

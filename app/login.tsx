@@ -33,7 +33,7 @@ export default function ModalScreen() {
     if (!loading && !error && response?.status === 200) {
       console.log(response.data["access-token"]);
       save("access-token", response.data["access-token"]);
-      router.replace("/promotions");
+      router.push("/home");
     } else if (!loading && error) {
       setPassword("");
     }
@@ -55,6 +55,7 @@ export default function ModalScreen() {
         </Text>
         <TextInput
           placeholder="Correo Electrónico"
+          placeholderTextColor="gray"
           value={email}
           onChangeText={(text) => setEmail(text)}
           style={[
@@ -70,6 +71,7 @@ export default function ModalScreen() {
             { borderColor: isFocused ? Colors["light"].tint : "#CCCCCC" },
           ]}
           placeholder="Contraseña"
+          placeholderTextColor="gray"
           value={password}
           onChangeText={(text) => setPassword(text)}
           onFocus={() => setIsFocused(true)}

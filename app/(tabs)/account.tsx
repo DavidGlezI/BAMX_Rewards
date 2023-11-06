@@ -13,35 +13,33 @@ import {
   Dimensions,
 } from "react-native";
 import { Text, View } from "../../components/Themed";
-import Colors from "../../constants/Colors"
+import Colors from "../../constants/Colors";
 import { useFetch } from "../../util/useApi";
 
-interface DonationProps{
+interface DonationProps {
   id: string;
   cantidad: string;
-};
+}
 
-const Donations: React.FC<DonationProps> = ({id, cantidad}) =>{
-  
+const Donations: React.FC<DonationProps> = ({ id, cantidad }) => {
   return (
-    <View style= {styles.donation}>
-      <Text style= {styles.subTitle}>Donación</Text>
-      <Text style= {styles.infoDonacion}>ID: {id}</Text>
-      <Text style= {styles.infoDonacion}>Cantidad: $ {cantidad} pesos</Text>
-      <View style = {styles.borderBottom}/>
+    <View style={styles.donation}>
+      <Text style={styles.subTitle}>Donación</Text>
+      <Text style={styles.infoDonacion}>ID: {id}</Text>
+      <Text style={styles.infoDonacion}>Cantidad: $ {cantidad} pesos</Text>
+      <View style={styles.borderBottom} />
     </View>
   );
 };
 
-
 export default function TabAccountScreen() {
-
-  const {data, error, loading, setData, fetch } = useFetch(
-    "donations"
-  );
-  const {data:userData, error:userError, loading:userLoading, fetch:userFetch } = useFetch(
-    "user"
-  );
+  const { data, error, loading, setData, fetch } = useFetch("donations");
+  const {
+    data: userData,
+    error: userError,
+    loading: userLoading,
+    fetch: userFetch,
+  } = useFetch("user");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -52,61 +50,69 @@ export default function TabAccountScreen() {
   useEffect(() => {
     fetch();
     userFetch();
-  }, [])
-
+  }, []);
 
   return (
-      <View style={styles.container}>
-    {
-      
-      (loading || userLoading) ? (<ActivityIndicator size="large" color={Colors["light"].tint} />) : error ? <Text>Error</Text>:
+    <View style={styles.container}>
+      {loading || userLoading ? (
+        <ActivityIndicator size="large" color={Colors["light"].tint} />
+      ) : error ? (
+        <Text>Error</Text>
+      ) : (
         <>
-        <Image
-          source={require("../../assets/images/background2.png")} // Troll 
-          style={styles.image}
-        />
-        <View style={styles.loginContaier}>
-          <Text style={styles.title}>Mi cuenta</Text>
-  
-          <Text style={styles.infoTitle}>Nombre y Apellido*</Text>
-          <Text style={styles.infoCuenta}>{userData?.user_name}</Text> 
-         
-          <Text style={styles.infoTitle}>Correo Electrónico*</Text>
-          <Text style={styles.infoCuenta}>{userData?.user_email}</Text> 
-  
-          <Text style={styles.infoTitle}>Contraseña*</Text>
-          <Text style={styles.infoCuenta}>******</Text> 
-  
-          <TouchableHighlight style={styles.loginBtn} onPress={()=>{router.replace("/modifydata")}}>
-            <Text style={styles.buttonText}>Modificar</Text>
-          </TouchableHighlight>
-  
-        </View>
-  
-  
-        <View style = {styles.loginContaier2}>
-          <View style = {styles.donation}>
-            <Text style={styles.title2}>Historial</Text>
-            <View style = {styles.borderBottom}/>
-            {data?.map((d) => (
-  
-            <Donations key={d?.donation_id} id = {d?.donation_id} cantidad = {d?.donation_quantity}/>
-            ))}
-           
-          </View>
-  
-        </View>
-  
-        {/* Use a light status bar on iOS to account for the black space above the modal */}
-        <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
-        </>
-        
-    }
-    </View>
+          <Image
+            source={require("../../assets/images/background2.png")} // Troll
+            style={styles.image}
+          />
+          <View style={styles.loginContaier}>
+            <Text style={styles.title}>Mi cuenta</Text>
 
+            <Text style={styles.infoTitle}>Nombre y Apellido*</Text>
+            <Text style={styles.infoCuenta}>{userData?.user_name}</Text>
+
+            <Text style={styles.infoTitle}>Correo Electrónico*</Text>
+            <Text style={styles.infoCuenta}>{userData?.user_email}</Text>
+
+            <Text style={styles.infoTitle}>Contraseña*</Text>
+            <Text style={styles.infoCuenta}>******</Text>
+
+            <TouchableHighlight
+              style={styles.loginBtn}
+              onPress={() => {
+                router.push("/modifydata");
+              }}
+            >
+              <Text style={styles.buttonText}>Modificar</Text>
+            </TouchableHighlight>
+          </View>
+
+          <View style={styles.loginContaier2}>
+            <View style={styles.donation}>
+              <Text style={styles.title2}>Historial</Text>
+              <View style={styles.borderBottom} />
+              {!data?.length ? (
+                <Text style={{ marginTop: 10 }}>
+                  Sin historial de donaciones
+                </Text>
+              ) : (
+                data?.map((d: any) => (
+                  <Donations
+                    key={d?.donation_id}
+                    id={d?.donation_id}
+                    cantidad={d?.donation_quantity}
+                  />
+                ))
+              )}
+            </View>
+          </View>
+
+          {/* Use a light status bar on iOS to account for the black space above the modal */}
+          <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+        </>
+      )}
+    </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -114,18 +120,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 20,
     justifyContent: "flex-end",
-    marginBottom: 30,
+    marginBottom: 5,
     position: "relative",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20
+    marginBottom: 20,
   },
   title2: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 5
+    marginBottom: 5,
   },
   buttonText: {
     color: "white",
@@ -138,46 +144,41 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     alignSelf: "center",
     justifyContent: "center",
-    marginTop: 20,
     height: 55,
     width: 240,
   },
   subTitle: {
     marginTop: 10,
-    fontWeight: "600"
-
+    fontWeight: "600",
   },
   input: {
-    height: 40,
     borderBottomWidth: 1,
     marginBottom: 12,
     paddingLeft: 8,
   },
   infoCuenta: {
-    height: 40,
     borderBottomWidth: 1,
-    marginBottom: 12,
-    outlineStyle: "none",
+    marginBottom: 24,
     fontWeight: "100",
   },
   infoTitle: {
     marginBottom: 12,
-    outlineStyle: "none",
     fontWeight: "100",
   },
-  infoDonacion:{
+  infoDonacion: {
     fontWeight: "100",
   },
   borderBottom: {
     borderBottomColor: "red",
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
 
-  donation:{
+  donation: {
     backgroundColor: "#fff",
   },
   loginContaier: {
-    padding: 40,
+    marginTop: 160,
+    padding: 25,
     borderRadius: 40,
     backgroundColor: "#fff",
     shadowColor: "black",
@@ -187,7 +188,6 @@ const styles = StyleSheet.create({
     width: "90%",
     flex: 0.6,
   },
-
   loginContaier2: {
     padding: 40,
     borderRadius: 40,
@@ -199,7 +199,6 @@ const styles = StyleSheet.create({
     width: "90%",
     flex: 0.4,
   },
-
   image: {
     position: "absolute",
     top: 0,

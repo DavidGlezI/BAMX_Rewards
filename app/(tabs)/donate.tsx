@@ -4,10 +4,6 @@ import { router } from "expo-router";
 import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "../../components/Themed";
 export default function TabDonateScreen() {
-  useEffect(() => {
-    router.replace("/welcome");
-  });
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Donate</Text>

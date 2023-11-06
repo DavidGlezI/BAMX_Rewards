@@ -33,7 +33,6 @@ export default function ModalScreen() {
 
   useEffect(() => {
     console.log(response);
-    console.log(loading);
     console.log(error);
     if (!loading && !error && response?.status === 201) {
       router.replace("/login");
@@ -52,8 +51,8 @@ export default function ModalScreen() {
           o Iniciar sesión
         </Text>
         <TextInput
-          placeholder="Nombre y Apellido
-          "
+          placeholder="Nombre y Apellido"
+          placeholderTextColor="gray"
           value={name}
           onChangeText={(text) => setName(text)}
           style={[
@@ -65,6 +64,7 @@ export default function ModalScreen() {
         />
         <TextInput
           placeholder="Correo Electrónico"
+          placeholderTextColor="gray"
           value={email}
           onChangeText={(text) => setEmail(text)}
           style={[
@@ -75,6 +75,7 @@ export default function ModalScreen() {
           onBlur={() => setIsFocused2(false)}
         />
         <TextInput
+          placeholderTextColor="gray"
           style={[
             styles.input,
             { borderColor: isFocused ? Colors["light"].tint : "#CCCCCC" },

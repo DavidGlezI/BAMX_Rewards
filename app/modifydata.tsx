@@ -10,12 +10,11 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import { Text, View } from "../components/Themed";
-import Colors from "../constants/Colors"
+import Colors from "../constants/Colors";
 import { useUpdateCreate, useFetch } from "../util/useApi";
-
 
 export default function ModalScreen() {
   const [email, setEmail] = useState("");
@@ -26,104 +25,121 @@ export default function ModalScreen() {
   const [isFocused1, setIsFocused1] = useState(false);
   const [isFocused2, setIsFocused2] = useState(false);
 
-  const {data, error:error2, loading:loading2, setData, fetch } = useFetch(
-    "user"
-  );
-  const { response, error, loading, update} = useUpdateCreate(
-    "user/",
-    {
-      user_email: email,
-      user_name: name,
-      user_password: newPassword,
-    }
-  );
+  const {
+    data,
+    error: error2,
+    loading: loading2,
+    setData,
+    fetch,
+  } = useFetch("user");
+  const { response, error, loading, update } = useUpdateCreate("user/", {
+    user_email: email,
+    user_name: name,
+    user_password: newPassword,
+  });
 
   useEffect(() => {
-    fetch()
-  }, [])
-
-  useEffect(() => {
-    if(data && !error && !loading) {
-      setEmail(data?.email)
-      setName(data?.name)
+    if (!data && !error2 && !loading2) {
+      //Call get user on initial render
+      fetch();
     }
-    
-  }, [loading, data])
+    if (data && !error2 && !loading2) {
+      // Update states on get user
+      setEmail(data?.user_email);
+      setName(data?.user_name);
+    }
+    if (response?.data && !error && !loading) {
+      // Update states on response
+      setEmail(response?.data?.user_email);
+      setName(response?.data?.user_name);
+    }
+  }, [loading, data, loading2, response]);
 
   return (
     <View style={styles.container}>
-      {
-        loading || loading2 ? <ActivityIndicator size="large" color={Colors["light"].tint} />: error2 || error ? <Text>Error</Text>:<>
-      <Image
-        source={require("../assets/images/background2.png")} // Troll 
-        style={styles.image}
-      />
-      <View style={styles.loginContaier}>
-        <Text style={styles.title}>Modificar mis datos</Text>
+      {loading || loading2 ? (
+        <ActivityIndicator size="large" color={Colors["light"].tint} />
+      ) : error2 || error ? (
+        <Text>Error</Text>
+      ) : (
+        <>
+          <Image
+            source={require("../assets/images/background2.png")} // Troll
+            style={styles.image}
+          />
+          <View style={styles.loginContaier}>
+            <Text style={styles.title}>Modificar mis datos</Text>
 
-        <Text style={styles.infoTitle}>Nombre y Apellido*</Text>
-        <TextInput
-        placeholder={name}
-          value={name}
-          onChangeText={(text) => setName(text)}
-          style={[
-            styles.input,
-            { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
-          ]}
-          onFocus={() => setIsFocused2(true)}
-          onBlur={() => setIsFocused2(false)}
-        />
-       
-        <Text style={styles.infoTitle}>Correo Electrónico*</Text>
-        <TextInput
-          placeholder={email}
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={[
-            styles.input,
-            { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
-          ]}
-          onFocus={() => setIsFocused2(true)}
-          onBlur={() => setIsFocused2(false)}
-        />
+            <Text style={styles.infoTitle}>Nombre y Apellido*</Text>
+            <TextInput
+              placeholderTextColor="gray"
+              placeholder={name}
+              value={name}
+              onChangeText={(text) => setName(text)}
+              style={[
+                styles.input,
+                { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
+              ]}
+              onFocus={() => setIsFocused2(true)}
+              onBlur={() => setIsFocused2(false)}
+            />
 
-        <Text style={styles.infoTitle}>Contraseña*</Text>
-        <TextInput
-          placeholder="Nueva Contraseña"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={[
-            styles.input,
-            { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
-          ]}
-          onFocus={() => setIsFocused2(true)}
-          onBlur={() => setIsFocused2(false)}
-        /> 
+            <Text style={styles.infoTitle}>Correo Electrónico*</Text>
+            <TextInput
+              placeholderTextColor="gray"
+              placeholder={email}
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+              style={[
+                styles.input,
+                { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
+              ]}
+              onFocus={() => setIsFocused2(true)}
+              onBlur={() => setIsFocused2(false)}
+            />
 
-        <Text style={styles.infoTitle}>Confirmar Contraseña*</Text>
-        <TextInput
-          placeholder="Confirmar Nueva Contraseña"
-          value={newPassword}
-          onChangeText={(text) => setNewPassword(text)}
-          style={[
-            styles.input,
-            { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
-          ]}
-          onFocus={() => setIsFocused2(true)}
-          onBlur={() => setIsFocused2(false)}
-        />
+            <Text style={styles.infoTitle}>Contraseña*</Text>
+            <TextInput
+              placeholderTextColor="gray"
+              placeholder="Nueva Contraseña"
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+              style={[
+                styles.input,
+                { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
+              ]}
+              onFocus={() => setIsFocused2(true)}
+              onBlur={() => setIsFocused2(false)}
+            />
 
-        <TouchableHighlight style={styles.loginBtn} onPress={() => password === newPassword ? update() : console.log("Not the same")}>
-          <Text style={styles.buttonText}>Guardar</Text>
-        </TouchableHighlight>
+            <Text style={styles.infoTitle}>Confirmar Contraseña*</Text>
+            <TextInput
+              placeholderTextColor="gray"
+              placeholder="Confirmar Nueva Contraseña"
+              value={newPassword}
+              onChangeText={(text) => setNewPassword(text)}
+              style={[
+                styles.input,
+                { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
+              ]}
+              onFocus={() => setIsFocused2(true)}
+              onBlur={() => setIsFocused2(false)}
+            />
 
-      </View>
-
-
+            <TouchableHighlight
+              style={styles.loginBtn}
+              onPress={() =>
+                password === newPassword
+                  ? update()
+                  : alert("Contraseñas no son iguales")
+              }
+            >
+              <Text style={styles.buttonText}>Guardar</Text>
+            </TouchableHighlight>
+          </View>
         </>
-      }
+      )}
     </View>
-
   );
 }
 
@@ -138,12 +154,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20
+    marginBottom: 20,
   },
   title2: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 5
+    marginBottom: 5,
   },
   buttonText: {
     color: "white",
@@ -162,8 +178,7 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     marginTop: 10,
-    fontWeight: "600"
-
+    fontWeight: "600",
   },
   input: {
     height: 40,
@@ -175,23 +190,21 @@ const styles = StyleSheet.create({
     height: 40,
     borderBottomWidth: 1,
     marginBottom: 12,
-    outlineStyle: "none",
     fontWeight: "100",
   },
   infoTitle: {
     marginBottom: 12,
-    outlineStyle: "none",
     fontWeight: "100",
   },
-  infoDonacion:{
+  infoDonacion: {
     fontWeight: "100",
   },
   borderBottom: {
     borderBottomColor: "red",
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
 
-  donation:{
+  donation: {
     backgroundColor: "#fff",
   },
   loginContaier: {

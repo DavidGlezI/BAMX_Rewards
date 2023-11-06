@@ -1,10 +1,17 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import React from 'react';
-
+import React from "react";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
+import { SplashScreen, Stack, Link, router } from "expo-router";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import {
+  useColorScheme,
+  Dimensions,
+  Pressable,
+  Image,
+  StyleSheet,
+} from "react-native";
+import Colors from "../constants/Colors";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -48,24 +55,58 @@ function RootLayoutNav() {
 
   return (
     <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen
-        name="modal"
-        options={{ presentation: "fullScreenModal" }}
+        name="index"
+        options={{ presentation: "fullScreenModal", headerShown: false }}
       />
       <Stack.Screen
         name="login"
         options={{ presentation: "fullScreenModal", headerShown: false }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="register"
         options={{ presentation: "fullScreenModal", headerShown: false }}
       />
-       <Stack.Screen
-        name="welcome"
-        options={{ presentation: "fullScreenModal", headerShown: false }}
+      <Stack.Screen
+        name="(tabs)"
+        options={{
+          presentation: "fullScreenModal",
+          title: "Modificar Datos",
+          headerLeft: () => (
+            <Pressable onPress={() => router.back()}>
+              <AntDesign name="arrowleft" size={24} color="black" />
+            </Pressable>
+          ),
+          header: () => (
+            <Image
+              style={styles.headerImage}
+              source={require("../assets/images/background2.png")}
+            />
+          ),
+        }}
       />
-     
+      <Stack.Screen
+        name="modal"
+        options={{ presentation: "fullScreenModal" }}
+      />
+      <Stack.Screen
+        name="modifydata"
+        options={{
+          presentation: "fullScreenModal",
+          title: "Modificar Datos",
+          headerLeft: () => (
+            <Pressable onPress={() => router.back()}>
+              <AntDesign name="arrowleft" size={24} color="black" />
+            </Pressable>
+          ),
+        }}
+      />
     </Stack>
   );
 }
+const styles = StyleSheet.create({
+  headerImage: {
+    minWidth: Dimensions.get("window").width,
+    height: 50,
+  },
+});
