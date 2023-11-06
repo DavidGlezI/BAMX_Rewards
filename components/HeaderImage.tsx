@@ -4,7 +4,7 @@ import { Image, StyleSheet, Dimensions } from "react-native";
 export function HeaderImage(props: any) {
   return (
     <Image
-      source={require("../assets/images/background1.png")}
+      source={require("../assets/images/background_tabs.png")}
       style={styles.headerImage}
     />
   );

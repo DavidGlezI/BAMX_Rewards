@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { HeaderImage } from "../../components/HeaderImage";
 import {
   StyleSheet,
   View,
@@ -153,10 +154,14 @@ export default function TabPromotionsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <HeaderImage /> 
+      
       <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={fetch} />
-        }
+        style={{ marginTop: 160 }} 
+        scrollEnabled={false}
+        // refreshControl={  ESTO LO HACE ESTATICO
+        //   <RefreshControl refreshing={loading} onRefresh={fetch} />
+        // }
       >
         {error ? (
           <Text>Sorry there was an error loading your data</Text>

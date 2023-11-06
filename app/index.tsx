@@ -9,7 +9,6 @@ import {
   Image,
   Dimensions,
 } from "react-native";
-import React, { useState } from "react";
 
 import { Text, View } from "../components/Themed";
 import Colors from "../constants/Colors";
