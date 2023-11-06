@@ -14,7 +14,9 @@ import Colors from "../../constants/Colors";
 
 interface Rectangle {
   id: string;
-  text: string;
+  mainText: string;
+  discountText: string;
+  pointsText: string;
   image: any;
 }
 
@@ -31,62 +33,86 @@ const images = [
 const rectangles: Rectangle[] = [
   {
     id: "1",
-    text: "Promoción 1",
+    mainText: "Combo Infantil",
+    discountText: "20 % descuento",
+    pointsText: "25 puntos",
     image: require("../../assets/images/QinLogo.png"),
   },
   {
     id: "2",
-    text: "Promoción 2",
+    mainText: "Refresco Refill",
+    discountText: "Gratis",
+    pointsText: "15 puntos",
     image: require("../../assets/images/QinLogo.png"),
   },
   {
     id: "3",
-    text: "Promoción 3",
+    mainText: "Papas Chicas",
+    discountText: "10 % descuento",
+    pointsText: "45 puntos",
     image: require("../../assets/images/QinLogo.png"),
   },
   {
     id: "4",
-    text: "Promoción 4",
+    mainText: "Combo Amigos",
+    discountText: "20 % descuento",
+    pointsText: "30 puntos",
     image: require("../../assets/images/QinLogo.png"),
   },
   {
     id: "5",
-    text: "Promoción 5",
-    image: require("../../assets/images/QinLogo.png"),
+    mainText: "Minibox",
+    discountText: "20 % descuento",
+    pointsText: "25 puntos",
+    image: require("../../assets/images/Mini-Box.png"),
   },
   {
     id: "6",
-    text: "Promoción 6",
+    mainText: "Combo Infantil",
+    discountText: "20 % descuento",
+    pointsText: "25 puntos",
     image: require("../../assets/images/QinLogo.png"),
   },
   {
     id: "7",
-    text: "Promoción 7",
+    mainText: "Combo Infantil",
+    discountText: "20 % descuento",
+    pointsText: "25 puntos",
     image: require("../../assets/images/QinLogo.png"),
   },
   {
     id: "8",
-    text: "Promoción 8",
+    mainText: "Combo Infantil",
+    discountText: "20 % descuento",
+    pointsText: "25 puntos",
     image: require("../../assets/images/QinLogo.png"),
   },
   {
     id: "9",
-    text: "Promoción 9",
+    mainText: "Combo Infantil",
+    discountText: "20 % descuento",
+    pointsText: "25 puntos",
     image: require("../../assets/images/QinLogo.png"),
   },
   {
     id: "10",
-    text: "Promoción 10",
+    mainText: "Combo Infantil",
+    discountText: "20 % descuento",
+    pointsText: "25 puntos",
     image: require("../../assets/images/QinLogo.png"),
   },
   {
     id: "11",
-    text: "Promoción 11",
+    mainText: "Combo Infantil",
+    discountText: "20 % descuento",
+    pointsText: "25 puntos",
     image: require("../../assets/images/QinLogo.png"),
   },
   {
     id: "12",
-    text: "Promoción 12",
+    mainText: "Combo Infantil",
+    discountText: "20 % descuento",
+    pointsText: "25 puntos",
     image: require("../../assets/images/QinLogo.png"),
   },
 ];
@@ -97,10 +123,27 @@ export default function TabPromotionsScreen() {
   const secondRowRectangles = rectangles.slice(half);
   const { data, error, loading, fetch } = useFetch("restaurants");
 
-  const renderRectangle = (item: Rectangle) => (
-    <View style={styles.rectangle} key={item.id}>
-      <Image source={item.image} style={styles.rectangleImage} />
-      <Text style={styles.rectangleText}>{item.text}</Text>
+  const renderRectangleWithCircle = (
+    item: Rectangle,
+    index: number,
+    isFirst: boolean
+  ) => (
+    <View
+      style={[styles.rectangleContainer, isFirst && { marginLeft: 20 }]}
+      key={item.id}
+    >
+      <View style={styles.smallCircle}>
+        <Image
+          source={images[index % images.length]}
+          style={styles.smallImage}
+        />
+      </View>
+      <View style={styles.rectangle}>
+        <Image source={item.image} style={styles.rectangleImage} />
+        <Text style={styles.rectangleTextMain}>{item.mainText}</Text>
+        <Text style={styles.rectangleTextDiscount}>{item.discountText}</Text>
+        <Text style={styles.rectangleTextPoints}>{item.pointsText}</Text>
+      </View>
     </View>
   );
 
@@ -129,7 +172,13 @@ export default function TabPromotionsScreen() {
                 showsHorizontalScrollIndicator={false}
               >
                 {images.map((image, index) => (
-                  <View key={String(index)} style={styles.circle}>
+                  <View
+                    key={String(index)}
+                    style={[
+                      styles.circle,
+                      index === 0 ? { marginLeft: 46 } : {},
+                    ]}
+                  >
                     <Image source={image} style={styles.image} />
                   </View>
                 ))}
@@ -137,26 +186,19 @@ export default function TabPromotionsScreen() {
               <Text style={styles.promocionesTitle}>PROMOCIONES</Text>
               <ScrollView
                 horizontal={true}
-                contentContainerStyle={styles.smallCirclesContainer}
                 showsHorizontalScrollIndicator={false}
               >
-                {images.map((image, index) => (
-                  <View key={`small-${index}`} style={styles.smallCircle}>
-                    <Image source={image} style={styles.smallImage} />
+                <View>
+                  <View style={styles.promotionsRow}>
+                    {firstRowRectangles.map((item, index) =>
+                      renderRectangleWithCircle(item, index, index === 0)
+                    )}
                   </View>
-                ))}
-              </ScrollView>
-
-              <ScrollView
-                horizontal={true}
-                contentContainerStyle={styles.promotionsContainer}
-                showsHorizontalScrollIndicator={false}
-              >
-                <View style={styles.promotionsRow}>
-                  {firstRowRectangles.map(renderRectangle)}
-                </View>
-                <View style={styles.promotionsRow}>
-                  {secondRowRectangles.map(renderRectangle)}
+                  <View style={styles.promotionsRow}>
+                    {secondRowRectangles.map((item, index) =>
+                      renderRectangleWithCircle(item, index, index === 0)
+                    )}
+                  </View>
                 </View>
               </ScrollView>
             </>
@@ -198,21 +240,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   circle: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
+    width: 48,
+    height: 48,
+    borderRadius: 20,
     backgroundColor: "#FFF",
     flexShrink: 0,
     margin: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
+    shadowColor: "rgba(0, 0, 0, 0.1)",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 4,
     elevation: 4,
-    overflow: "hidden",
   },
   image: {
     width: "100%",
@@ -228,14 +266,15 @@ const styles = StyleSheet.create({
     height: 160,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
+    shadowColor: "rgba(0, 0, 0, 0.1)",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 4,
     elevation: 4,
+  },
+  rectangleContainer: {
+    alignItems: "center",
+    marginBottom: 20,
   },
   rectangleImage: {
     width: 50,
@@ -253,7 +292,10 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   promotionsContainer: {
-    flexDirection: "column",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+    paddingTop: 12,
   },
   smallCirclesContainer: {
     flexDirection: "row",
@@ -264,17 +306,38 @@ const styles = StyleSheet.create({
   smallCircle: {
     width: 24,
     height: 24,
-    borderRadius: 12,
+    borderRadius: 20,
     backgroundColor: "#FFF",
-    flexShrink: 0,
-    margin: 10,
+    position: "absolute",
+    zIndex: 1,
     justifyContent: "center",
     alignItems: "center",
-    overflow: "hidden",
+    shadowColor: "rgba(0, 0, 0, 0.1)",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 4,
+    elevation: 4,
   },
   smallImage: {
     width: "100%",
     height: "100%",
     resizeMode: "contain",
+  },
+  rectangleTextMain: {
+    fontSize: 12,
+    color: "#000",
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  rectangleTextDiscount: {
+    fontSize: 8,
+    color: "#E6012E",
+    textAlign: "center",
+  },
+  rectangleTextPoints: {
+    display: "flex",
+    fontSize: 8,
+    color: "#BBB",
+    textAlign: "center",
   },
 });
