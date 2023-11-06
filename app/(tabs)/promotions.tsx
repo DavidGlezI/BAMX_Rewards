@@ -158,10 +158,10 @@ export default function TabPromotionsScreen() {
       
       <ScrollView
         style={{ marginTop: 160 }} 
-        scrollEnabled={false}
-        // refreshControl={  ESTO LO HACE ESTATICO
-        //   <RefreshControl refreshing={loading} onRefresh={fetch} />
-        // }
+        // scrollEnabled={false}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={fetch} />
+        }
       >
         {error ? (
           <Text>Sorry there was an error loading your data</Text>
