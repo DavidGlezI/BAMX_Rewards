@@ -71,18 +71,7 @@ function RootLayoutNav() {
         name="(tabs)"
         options={{
           presentation: "fullScreenModal",
-          title: "Modificar Datos",
-          headerLeft: () => (
-            <Pressable onPress={() => router.back()}>
-              <AntDesign name="arrowleft" size={24} color="black" />
-            </Pressable>
-          ),
-          header: () => (
-            <Image
-              style={styles.headerImage}
-              source={require("../assets/images/background2.png")}
-            />
-          ),
+          headerShown: false,
         }}
       />
       <Stack.Screen

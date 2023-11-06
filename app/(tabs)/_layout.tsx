@@ -5,11 +5,13 @@ import { Feather, AntDesign, Octicons, Ionicons } from "@expo/vector-icons";
 import {
   Pressable,
   useColorScheme,
-  Image,
   StyleSheet,
+  Dimensions,
+  View,
   Text,
+  ImageBackground,
 } from "react-native";
-
+import { HeaderImage } from "../../components/HeaderImage";
 import Colors from "../../constants/Colors";
 
 /**
@@ -30,6 +32,7 @@ export default function TabLayout() {
           justifyContent: "center",
           alignContent: "center",
         },
+
         tabBarActiveTintColor: Colors["light"].tint,
       }}
     >
@@ -37,6 +40,7 @@ export default function TabLayout() {
         name="account"
         options={{
           headerShown: false,
+
           title: "",
           tabBarIcon: ({ color }) => (
             <Feather name="user" size={22} color={color} />
@@ -100,3 +104,13 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  headerImage: {
+    position: "absolute",
+    top: 0,
+    zIndex: 1,
+    minWidth: Dimensions.get("window").width + 50,
+    height: Dimensions.get("window").height / 2.5,
+  },
+});

@@ -15,6 +15,7 @@ import {
 import { Text, View } from "../../components/Themed";
 import Colors from "../../constants/Colors";
 import { useFetch } from "../../util/useApi";
+import { HeaderImage } from "../../components/HeaderImage";
 
 interface DonationProps {
   id: string;
@@ -60,10 +61,7 @@ export default function TabAccountScreen() {
         <Text>Error</Text>
       ) : (
         <>
-          <Image
-            source={require("../../assets/images/background2.png")} // Troll
-            style={styles.image}
-          />
+          <HeaderImage />
           <View style={styles.loginContaier}>
             <Text style={styles.title}>Mi cuenta</Text>
 
