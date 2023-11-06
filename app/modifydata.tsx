@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import {
   Platform,
   TextInput,
@@ -40,7 +40,7 @@ export default function ModifydataScreen() {
 
   useEffect(() => {
     if (!data && !error2 && !loading2) {
-      //Call get user on initial render
+      //fetch user on component render
       fetch();
     }
     if (data && !error2 && !loading2) {
@@ -57,19 +57,18 @@ export default function ModifydataScreen() {
 
   return (
     <View style={styles.container}>
-      
-          <Image
-            source={require("../assets/images/background2.png")} // Troll
-            style={styles.image}
-          />
-          <View style={styles.loginContaier}>
-            <Text style={styles.title}>Modificar mis datos</Text>
-            {loading || loading2 ? (
-        <ActivityIndicator size="large" color={Colors["light"].tint} />
-      ) : error2 || error ? (
-        <Text>Error</Text>
-      ) : (
-        <>
+      <Image
+        source={require("../assets/images/background2.png")} // Troll
+        style={styles.image}
+      />
+      <View style={styles.loginContaier}>
+        <Text style={styles.title}>Modificar mis datos</Text>
+        {loading || loading2 ? (
+          <ActivityIndicator size="large" color={Colors["light"].tint} />
+        ) : error2 || error ? (
+          <Text>Error</Text>
+        ) : (
+          <>
             <Text style={styles.infoTitle}>Nombre y Apellido*</Text>
             <TextInput
               placeholderTextColor="gray"
@@ -136,9 +135,9 @@ export default function ModifydataScreen() {
             >
               <Text style={styles.buttonText}>Guardar</Text>
             </TouchableHighlight>
-        </>
-      )}
-          </View>
+          </>
+        )}
+      </View>
     </View>
   );
 }

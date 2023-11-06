@@ -31,6 +31,9 @@ export default function LoginScreen() {
   });
 
   useEffect(() => {
+    console.log(
+      `being called with values load: ${loading} error: ${error} response: ${response}`
+    );
     if (!loading && !error && response?.status === 200) {
       console.log(response.data["access-token"]);
       save("access-token", response.data["access-token"]);
@@ -38,7 +41,7 @@ export default function LoginScreen() {
     } else if (!loading && error) {
       setPassword("");
     }
-  }, [response, loading, error]);
+  }, [response, loading]);
 
   return (
     <View style={styles.container}>
@@ -79,10 +82,17 @@ export default function LoginScreen() {
           onBlur={() => setIsFocused(false)}
           secureTextEntry
         />
-        {loading ? <ActivityIndicator style={{marginTop: 10}} size="small" color={Colors["light"].tint} /> 
-        : <TouchableHighlight style={styles.loginBtn} onPress={create}>
-          <Text style={styles.buttonText}>Iniciar Sesión</Text>
-        </TouchableHighlight>}
+        {loading ? (
+          <ActivityIndicator
+            style={{ marginTop: 10 }}
+            size="small"
+            color={Colors["light"].tint}
+          />
+        ) : (
+          <TouchableHighlight style={styles.loginBtn} onPress={create}>
+            <Text style={styles.buttonText}>Iniciar Sesión</Text>
+          </TouchableHighlight>
+        )}
 
         {error && !isFocused && !isFocused2 && (
           <Text style={styles.errorText}>

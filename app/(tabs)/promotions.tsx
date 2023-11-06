@@ -164,13 +164,21 @@ export default function TabPromotionsScreen() {
         }
       >
         {error ? (
-          <Text>Sorry there was an error loading your data</Text>
+          <Text style={{ marginTop: 160 }}>
+            Sorry there was an error loading your data
+          </Text>
         ) : loading ? (
-          <ActivityIndicator size="large" color={Colors["light"].tint} />
+          <ActivityIndicator
+            style={{ marginTop: 160 }}
+            size="large"
+            color={Colors["light"].tint}
+          />
         ) : (
           data && (
             <>
-              <Text style={styles.establecimientosTitle}>ESTABLECIMIENTOS</Text>
+              <Text style={{ ...styles.establecimientosTitle, marginTop: 190 }}>
+                ESTABLECIMIENTOS
+              </Text>
               <ScrollView
                 horizontal={true}
                 contentContainerStyle={styles.circlesContainer}
