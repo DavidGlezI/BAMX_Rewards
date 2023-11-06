@@ -157,7 +157,6 @@ export default function TabPromotionsScreen() {
       <HeaderImage />
 
       <ScrollView
-        style={{ marginTop: 160 }}
         // scrollEnabled={false}
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={fetch} />
