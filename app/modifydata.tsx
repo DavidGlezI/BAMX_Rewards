@@ -15,6 +15,7 @@ import {
 import { Text, View } from "../components/Themed";
 import Colors from "../constants/Colors";
 import { useUpdateCreate, useFetch } from "../util/useApi";
+import { HeaderImage } from "../components/HeaderImage";
 
 export default function ModifydataScreen() {
   const [email, setEmail] = useState("");
@@ -58,10 +59,7 @@ export default function ModifydataScreen() {
   return (
     <View style={styles.container}>
       
-          <Image
-            source={require("../assets/images/background2.png")} // Troll
-            style={styles.image}
-          />
+          <HeaderImage />
           <View style={styles.loginContaier}>
             <Text style={styles.title}>Modificar mis datos</Text>
             {loading || loading2 ? (
@@ -203,7 +201,6 @@ const styles = StyleSheet.create({
     borderBottomColor: "red",
     borderBottomWidth: 1,
   },
-
   donation: {
     backgroundColor: "#fff",
   },
@@ -216,7 +213,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
     width: "90%",
-    flex: 0.6,
+    flex: 0.7,
   },
 
   loginContaier2: {
