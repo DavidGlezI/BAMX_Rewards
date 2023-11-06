@@ -15,7 +15,7 @@ import { useUpdateCreate } from "../util/useApi";
 import { Text, View } from "../components/Themed";
 import Colors from "../constants/Colors";
 
-export default function ModalScreen() {
+export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");

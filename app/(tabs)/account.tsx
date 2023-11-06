@@ -6,11 +6,12 @@ import {
   TextInput,
   TouchableHighlight,
   Pressable,
-  Button,
+  SafeAreaView,
   ActivityIndicator,
   StyleSheet,
-  Image,
-  Dimensions,
+  ScrollView,
+  RefreshControl,
+  Dimensions
 } from "react-native";
 import { Text, View } from "../../components/Themed";
 import Colors from "../../constants/Colors";
@@ -54,14 +55,19 @@ export default function TabAccountScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView >
+      <ScrollView 
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={() => (fetch(), userFetch())} />
+        }
+      >
       {loading || userLoading ? (
         <ActivityIndicator size="large" color={Colors["light"].tint} />
-      ) : error ? (
-        <Text>Error</Text>
-      ) : (
-        <>
-          <HeaderImage />
+        ) : error ? (
+          <Text>Error</Text>
+          ) : (
+            <View style={styles.container}>
+              <HeaderImage />
           <View style={styles.loginContaier}>
             <Text style={styles.title}>Mi cuenta</Text>
 
@@ -106,9 +112,10 @@ export default function TabAccountScreen() {
 
           {/* Use a light status bar on iOS to account for the black space above the modal */}
           <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
-        </>
+        </View>
       )}
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -116,11 +123,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    gap: 20,
     justifyContent: "flex-end",
+    gap: 20,
     marginBottom: 5,
     position: "relative",
   },
+
   title: {
     fontSize: 24,
     fontWeight: "bold",

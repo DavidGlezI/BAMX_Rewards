@@ -57,31 +57,28 @@ function RootLayoutNav() {
     <Stack>
       <Stack.Screen
         name="index"
-        options={{ presentation: "fullScreenModal", headerShown: false }}
+        options={{  headerShown: false }}
       />
       <Stack.Screen
         name="login"
-        options={{ presentation: "fullScreenModal", headerShown: false }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="register"
-        options={{ presentation: "fullScreenModal", headerShown: false }}
+        options={{  headerShown: false }}
       />
       <Stack.Screen
         name="(tabs)"
         options={{
-          presentation: "fullScreenModal",
           headerShown: false,
         }}
       />
       <Stack.Screen
         name="modal"
-        options={{ presentation: "fullScreenModal" }}
       />
       <Stack.Screen
         name="modifydata"
         options={{
-          presentation: "fullScreenModal",
           title: "Modificar Datos",
           headerLeft: () => (
             <Pressable onPress={() => router.back()}>
