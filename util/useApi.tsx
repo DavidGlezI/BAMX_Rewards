@@ -22,6 +22,7 @@ export function useFetch(url: string) {
       setError(null);
       setLoading(true);
       const jwtToken = await getValueFor("access-token");
+  
       const response = await axios.get(API_BASE_URL + url, {
         headers: {
           "x-api-key": API_KEY,
@@ -51,6 +52,9 @@ export function useUpdateCreate(url: string, payload: any) {
     try {
       setError(null);
       setLoading(true);
+      console.log(payload)
+      console.log(API_BASE_URL + url)
+      console.log(API_KEY)
       const response = await axios.post(API_BASE_URL + url, payload, {
         headers: {
           "x-api-key": API_KEY,
@@ -58,7 +62,7 @@ export function useUpdateCreate(url: string, payload: any) {
         },
       });
       setResponse(response);
-    } catch (err: any) {
+    } catch (err: any) {    
       console.log(err);
       setError(err);
     } finally {

@@ -9,6 +9,7 @@ import {
   Animated,
   StyleSheet,
   Image,
+  ActivityIndicator,
   Dimensions,
 } from "react-native";
 import { useUpdateCreate } from "../util/useApi";
@@ -19,7 +20,7 @@ async function save(key: string, value: any) {
   await SecureStore.setItemAsync(key, value);
 }
 
-export default function ModalScreen() {
+export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -78,9 +79,10 @@ export default function ModalScreen() {
           onBlur={() => setIsFocused(false)}
           secureTextEntry
         />
-        <TouchableHighlight style={styles.loginBtn} onPress={create}>
+        {loading ? <ActivityIndicator style={{marginTop: 10}} size="small" color={Colors["light"].tint} /> 
+        : <TouchableHighlight style={styles.loginBtn} onPress={create}>
           <Text style={styles.buttonText}>Iniciar Sesión</Text>
-        </TouchableHighlight>
+        </TouchableHighlight>}
 
         {error && !isFocused && !isFocused2 && (
           <Text style={styles.errorText}>

@@ -13,7 +13,7 @@ import {
 import { Text, View } from "../components/Themed";
 import Colors from "../constants/Colors";
 
-export default function ModalScreen() {
+export default function Page() {
 
   return (
     <View style={styles.container}>
@@ -23,10 +23,10 @@ export default function ModalScreen() {
       />
         <View style={styles.subContainer}>
 
-        <TouchableHighlight style={styles.loginBtn} onPress={() => router.replace("/login")}>
+        <TouchableHighlight style={styles.loginBtn} onPress={() => router.push("/login")}>
           <Text style={styles.buttonText}>Iniciar Sesión</Text>
         </TouchableHighlight>
-          <Text style={styles.subTitle} onPress={() => router.replace("/register")}>No tienes cuenta? Registrate</Text>
+          <Text style={styles.subTitle} onPress={() => router.push("/register")}>No tienes cuenta? Registrate</Text>
         </View>
 
     </View>

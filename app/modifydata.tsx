@@ -16,7 +16,7 @@ import { Text, View } from "../components/Themed";
 import Colors from "../constants/Colors";
 import { useUpdateCreate, useFetch } from "../util/useApi";
 
-export default function ModalScreen() {
+export default function ModifydataScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -57,19 +57,19 @@ export default function ModalScreen() {
 
   return (
     <View style={styles.container}>
-      {loading || loading2 ? (
-        <ActivityIndicator size="large" color={Colors["light"].tint} />
-      ) : error2 || error ? (
-        <Text>Error</Text>
-      ) : (
-        <>
+      
           <Image
             source={require("../assets/images/background2.png")} // Troll
             style={styles.image}
           />
           <View style={styles.loginContaier}>
             <Text style={styles.title}>Modificar mis datos</Text>
-
+            {loading || loading2 ? (
+        <ActivityIndicator size="large" color={Colors["light"].tint} />
+      ) : error2 || error ? (
+        <Text>Error</Text>
+      ) : (
+        <>
             <Text style={styles.infoTitle}>Nombre y Apellido*</Text>
             <TextInput
               placeholderTextColor="gray"
@@ -136,9 +136,9 @@ export default function ModalScreen() {
             >
               <Text style={styles.buttonText}>Guardar</Text>
             </TouchableHighlight>
-          </View>
         </>
       )}
+          </View>
     </View>
   );
 }
