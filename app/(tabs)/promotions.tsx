@@ -29,7 +29,6 @@ const images = [
   require("../../assets/images/LegoLogo.png"),
   require("../../assets/images/CarlsLogo.png"),
   require("../../assets/images/QinLogo.png"),
-  require("../../assets/images/CarlsLogo.png"),
 ];
 
 const rectangles: Rectangle[] = [
@@ -66,7 +65,7 @@ const rectangles: Rectangle[] = [
     mainText: "Minibox",
     discountText: "15 % descuento",
     pointsText: "20 puntos",
-    image: require("../../assets/images/Mini-Box.png"),
+    image: require("../../assets/images/ShortNike.png"),
   },
   {
     id: "6",

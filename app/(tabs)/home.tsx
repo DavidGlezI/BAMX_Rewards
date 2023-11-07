@@ -29,7 +29,6 @@ const images = [
   require("../../assets/images/LegoLogo.png"),
   require("../../assets/images/CarlsLogo.png"),
   require("../../assets/images/QinLogo.png"),
-  require("../../assets/images/CarlsLogo.png"),
 ];
 
 const rectangles: Rectangle[] = [
