@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   loginContaier: {
-    marginTop: 150,
+    marginTop: Dimensions.get("window").height / 6.2,
     marginRight: 20,
     marginLeft: 20,
     padding: 25,

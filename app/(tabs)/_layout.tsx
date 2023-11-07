@@ -37,6 +37,17 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
+        name="donate"
+        options={{
+          headerShown: false,
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="creditcard" size={22} color={color} />
+          ),
+        }}
+      />
+      
+      <Tabs.Screen
         name="account"
         options={{
           headerShown: false,
@@ -44,16 +55,6 @@ export default function TabLayout() {
           title: "",
           tabBarIcon: ({ color }) => (
             <Feather name="user" size={22} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="donate"
-        options={{
-          headerShown: false,
-          title: "",
-          tabBarIcon: ({ color }) => (
-            <AntDesign name="creditcard" size={22} color={color} />
           ),
         }}
       />

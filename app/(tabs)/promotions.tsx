@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   ScrollView,
   RefreshControl,
+  Dimensions,
   ActivityIndicator,
 } from "react-native";
 import { useFetch } from "../../util/useApi";
@@ -163,19 +164,19 @@ export default function TabPromotionsScreen() {
         }
       >
         {error ? (
-          <Text style={{ marginTop: 160 }}>
+          <Text style={{ marginTop: Dimensions.get("window").height / 5 }}>
             Sorry there was an error loading your data
           </Text>
         ) : loading ? (
           <ActivityIndicator
-            style={{ marginTop: 160 }}
+            style={{ marginTop: Dimensions.get("window").height / 5 }}
             size="large"
             color={Colors["light"].tint}
           />
         ) : (
           data && (
             <>
-              <Text style={{ ...styles.establecimientosTitle, marginTop: 190 }}>
+              <Text style={{ ...styles.establecimientosTitle, marginTop: Dimensions.get("window").height / 5 +10 }}>
                 ESTABLECIMIENTOS
               </Text>
               <ScrollView

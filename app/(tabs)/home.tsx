@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   ScrollView,
   RefreshControl,
+  Dimensions,
   ActivityIndicator,
 } from "react-native";
 import { useFetch } from "../../util/useApi";
@@ -163,19 +164,19 @@ export default function TabHomeScreen() {
         }
       >
         {error ? (
-          <Text style={{ marginTop: 190 }}>
+          <Text style={{ marginTop: Dimensions.get("window").height / 5 }}>
             Sorry there was an error loading your data
           </Text>
         ) : loading ? (
           <ActivityIndicator
-            style={{ marginTop: 190 }}
+            style={{ marginTop: Dimensions.get("window").height / 5  }}
             size="large"
             color={Colors["light"].tint}
           />
         ) : (
           data && (
             <>
-              <View style={{ ...styles.card, marginTop: 170 }}>
+              <View style={{ ...styles.card, marginTop: Dimensions.get("window").height / 5  }}>
                 <View style={styles.contentWrapper}>
                   <Text style={styles.cardText}>Tarjeta</Text>
                   <View style={styles.circleWrapper}>
