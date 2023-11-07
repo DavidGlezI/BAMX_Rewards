@@ -26,7 +26,7 @@ const images = [
   require("../../assets/images/QinLogo.png"),
   require("../../assets/images/CarlsLogo.png"),
   require("../../assets/images/CinepolisLogo.png"),
-  require("../../assets/images/QinLogo.png"),
+  require("../../assets/images/LegoLogo.png"),
   require("../../assets/images/CarlsLogo.png"),
   require("../../assets/images/QinLogo.png"),
   require("../../assets/images/CarlsLogo.png"),
@@ -56,10 +56,10 @@ const rectangles: Rectangle[] = [
   },
   {
     id: "4",
-    mainText: "Minibox",
-    discountText: "20 % descuento",
+    mainText: "AT-AT",
+    discountText: "Gratis",
     pointsText: "30 puntos",
-    image: require("../../assets/images/Mini-Box.png"),
+    image: require("../../assets/images/AT-AT.png"),
   },
   {
     id: "5",
@@ -404,8 +404,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   circle: {
-    width: 48,
-    height: 48,
+    width: 50,
+    height: 50,
     borderRadius: 20,
     backgroundColor: "#FFF",
     flexShrink: 0,
@@ -419,6 +419,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+    resizeMode: "contain",
   },
   rectangle: {
     backgroundColor: "#FFF",
