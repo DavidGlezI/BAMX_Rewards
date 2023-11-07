@@ -176,7 +176,7 @@ export default function TabHomeScreen() {
         ) : (
           data && (
             <>
-              <View style={{ ...styles.card, marginTop: Dimensions.get("window").height / 5  }}>
+              <View style={{ ...styles.card, marginTop: Dimensions.get("window").height / 5, alignSelf: "center"  }}>
                 <View style={styles.contentWrapper}>
                   <Text style={styles.cardText}>Tarjeta</Text>
                   <View style={styles.circleWrapper}>
@@ -356,7 +356,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 4,
     elevation: 4,
-    marginLeft: 30,
   },
   contentWrapper: {
     flexDirection: "row",
