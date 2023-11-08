@@ -8,7 +8,17 @@ import {
   Image,
 } from "react-native";
 
-const PopUpPromo = ({ isVisible, onClose, rectangle }) => {
+interface PopUpPromoProps {
+  isVisible: boolean;
+  onClose: () => void;
+  rectangle: Rectangle;
+}
+
+const PopUpPromo: React.FC<PopUpPromoProps> = ({
+  isVisible,
+  onClose,
+  rectangle,
+}) => {
   if (!isVisible) return null;
 
   return (
