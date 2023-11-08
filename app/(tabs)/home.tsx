@@ -205,7 +205,7 @@ export default function TabHomeScreen() {
                         <Image source={require("../../assets/images/qr.png")} />
                       </View>
                     </View>
-                    <Text style={styles.pointsText}>200 pnts</Text>
+                    <Text style={styles.pointsText}>200 puntos</Text>
                   </View>
                 </View>
               </View>
