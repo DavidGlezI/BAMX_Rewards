@@ -59,10 +59,7 @@ export default function ModifydataScreen() {
   return (
     <View style={styles.container}>
       
-          <Image
-            source={require("../assets/images/background2.png")} // Troll
-            style={styles.image}
-          />
+          <HeaderImage />
           <View style={styles.loginContaier}>
             <Text style={styles.title}>Modificar mis datos</Text>
             {loading || loading2 ? (
