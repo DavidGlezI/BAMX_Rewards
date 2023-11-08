@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { HeaderImage } from "../../components/HeaderImage";
 import {
   StyleSheet,
@@ -10,9 +10,11 @@ import {
   RefreshControl,
   Dimensions,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import { useFetch } from "../../util/useApi";
 import Colors from "../../constants/Colors";
+import PopUpPromo from "../../components/PopUpPromo";
 
 interface Rectangle {
   id: string;
@@ -26,10 +28,9 @@ const images = [
   require("../../assets/images/QinLogo.png"),
   require("../../assets/images/CarlsLogo.png"),
   require("../../assets/images/CinepolisLogo.png"),
-  require("../../assets/images/QinLogo.png"),
-  require("../../assets/images/CarlsLogo.png"),
-  require("../../assets/images/QinLogo.png"),
-  require("../../assets/images/CarlsLogo.png"),
+  require("../../assets/images/LegoLogo.png"),
+  require("../../assets/images/NikeLogo.png"),
+  require("../../assets/images/KfcLogo.png"),
 ];
 
 const rectangles: Rectangle[] = [
@@ -44,42 +45,42 @@ const rectangles: Rectangle[] = [
     id: "2",
     mainText: "Refresco Refill",
     discountText: "Gratis",
-    pointsText: "15 puntos",
+    pointsText: "20 puntos",
     image: require("../../assets/images/CarlsRefresco.png"),
   },
   {
     id: "3",
     mainText: "Palomitas Grandes",
     discountText: "10 % descuento",
-    pointsText: "35 puntos",
+    pointsText: "15 puntos",
     image: require("../../assets/images/CinepolisPalomitas.png"),
   },
   {
     id: "4",
-    mainText: "Combo Amigos",
-    discountText: "20 % descuento",
-    pointsText: "30 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    mainText: "AT-AT",
+    discountText: "Gratis",
+    pointsText: "60 puntos",
+    image: require("../../assets/images/AT-AT.png"),
   },
   {
     id: "5",
-    mainText: "Minibox",
-    discountText: "20 % descuento",
-    pointsText: "25 puntos",
-    image: require("../../assets/images/Mini-Box.png"),
+    mainText: "NBA Los Angeles Lakers",
+    discountText: "15 % descuento",
+    pointsText: "30 puntos",
+    image: require("../../assets/images/NikeT-Shirt.png"),
   },
   {
     id: "6",
-    mainText: "Combo Infantil",
+    mainText: "Cubeta Grande",
     discountText: "20 % descuento",
-    pointsText: "25 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    pointsText: "35 puntos",
+    image: require("../../assets/images/BucketKfc.png"),
   },
   {
     id: "7",
     mainText: "Minibox",
-    discountText: "20 % descuento",
-    pointsText: "25 puntos",
+    discountText: "15 % descuento",
+    pointsText: "20 puntos",
     image: require("../../assets/images/Mini-Box.png"),
   },
   {
@@ -91,31 +92,31 @@ const rectangles: Rectangle[] = [
   },
   {
     id: "9",
-    mainText: "Combo Infantil",
-    discountText: "20 % descuento",
-    pointsText: "25 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    mainText: "Hot Dog Jumbo",
+    discountText: "15 % descuento",
+    pointsText: "20 puntos",
+    image: require("../../assets/images/HotDogCinepolis.png"),
   },
   {
     id: "10",
-    mainText: "Combo Infantil",
-    discountText: "20 % descuento",
-    pointsText: "25 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    mainText: "Globo Terráqueo",
+    discountText: "10 % descuento",
+    pointsText: "30 puntos",
+    image: require("../../assets/images/Globo-Terraqueo.png"),
   },
   {
     id: "11",
-    mainText: "Combo Infantil",
-    discountText: "20 % descuento",
-    pointsText: "25 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    mainText: "Nike Air Winflo 9",
+    discountText: "5 % descuento",
+    pointsText: "10 puntos",
+    image: require("../../assets/images/NikeShoe.png"),
   },
   {
     id: "12",
-    mainText: "Combo Infantil",
+    mainText: "Mac N Cheese Bowl",
     discountText: "20 % descuento",
     pointsText: "25 puntos",
-    image: require("../../assets/images/QinLogo.png"),
+    image: require("../../assets/images/MacNCheeseKfc.png"),
   },
 ];
 
@@ -124,13 +125,26 @@ export default function TabPromotionsScreen() {
   const firstRowRectangles = rectangles.slice(0, half);
   const secondRowRectangles = rectangles.slice(half);
   const { data, error, loading, fetch } = useFetch("restaurants");
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [selectedRectangle, setSelectedRectangle] = useState<Rectangle | null>(
+    null
+  );
+  const openPopup = (rectangle: Rectangle) => {
+    setSelectedRectangle(rectangle);
+    setIsPopupVisible(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupVisible(false);
+  };
 
   const renderRectangleWithCircle = (
     item: Rectangle,
     index: number,
     isFirst: boolean
   ) => (
-    <View
+    <TouchableOpacity
+      onPress={() => openPopup(item)}
       style={[styles.rectangleContainer, isFirst && { marginLeft: 20 }]}
       key={item.id}
     >
@@ -146,7 +160,7 @@ export default function TabPromotionsScreen() {
         <Text style={styles.rectangleTextDiscount}>{item.discountText}</Text>
         <Text style={styles.rectangleTextPoints}>{item.pointsText}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   useEffect(() => {
@@ -176,7 +190,12 @@ export default function TabPromotionsScreen() {
         ) : (
           data && (
             <>
-              <Text style={{ ...styles.establecimientosTitle, marginTop: Dimensions.get("window").height / 5 +10 }}>
+              <Text
+                style={{
+                  ...styles.establecimientosTitle,
+                  marginTop: Dimensions.get("window").height / 5 + 10,
+                }}
+              >
                 ESTABLECIMIENTOS
               </Text>
               <ScrollView
@@ -189,7 +208,7 @@ export default function TabPromotionsScreen() {
                     key={String(index)}
                     style={[
                       styles.circle,
-                      index === 0 ? { marginLeft: 46 } : {},
+                      index === 0 ? { marginLeft: 35 } : {},
                     ]}
                   >
                     <Image source={image} style={styles.image} />
@@ -218,6 +237,13 @@ export default function TabPromotionsScreen() {
           )
         )}
       </ScrollView>
+      {isPopupVisible && selectedRectangle && (
+        <PopUpPromo
+          isVisible={isPopupVisible}
+          onClose={closePopup}
+          rectangle={selectedRectangle}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -253,8 +279,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   circle: {
-    width: 48,
-    height: 48,
+    width: 50,
+    height: 50,
     borderRadius: 20,
     backgroundColor: "#FFF",
     flexShrink: 0,
