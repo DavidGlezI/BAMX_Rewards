@@ -27,7 +27,7 @@ const images = [
   require("../../assets/images/CarlsLogo.png"),
   require("../../assets/images/CinepolisLogo.png"),
   require("../../assets/images/LegoLogo.png"),
-  require("../../assets/images/CarlsLogo.png"),
+  require("../../assets/images/NikeLogo.png"),
   require("../../assets/images/QinLogo.png"),
 ];
 
@@ -43,14 +43,14 @@ const rectangles: Rectangle[] = [
     id: "2",
     mainText: "Refresco Refill",
     discountText: "Gratis",
-    pointsText: "15 puntos",
+    pointsText: "20 puntos",
     image: require("../../assets/images/CarlsRefresco.png"),
   },
   {
     id: "3",
     mainText: "Palomitas Grandes",
     discountText: "10 % descuento",
-    pointsText: "35 puntos",
+    pointsText: "15 puntos",
     image: require("../../assets/images/CinepolisPalomitas.png"),
   },
   {
@@ -62,9 +62,9 @@ const rectangles: Rectangle[] = [
   },
   {
     id: "5",
-    mainText: "Minibox",
+    mainText: "Shorts Dri-FIT",
     discountText: "15 % descuento",
-    pointsText: "20 puntos",
+    pointsText: "30 puntos",
     image: require("../../assets/images/ShortNike.png"),
   },
   {
@@ -188,7 +188,7 @@ export default function TabPromotionsScreen() {
                     key={String(index)}
                     style={[
                       styles.circle,
-                      index === 0 ? { marginLeft: 46 } : {},
+                      index === 0 ? { marginLeft: 35 } : {},
                     ]}
                   >
                     <Image source={image} style={styles.image} />
