@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     alignSelf: "center",
     zIndex: 0,
+    marginLeft: 20,
     minWidth: Dimensions.get("window").width,
     height: Dimensions.get("window").height / 3,
   },

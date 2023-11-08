@@ -33,7 +33,6 @@ export function useFetch(url: string) {
       });
       setData(response.data);
     } catch (err: any) {
-      alert(err);
       console.log(err);
       setError(err);
     } finally {
