@@ -138,6 +138,10 @@ export default function TabPromotionsScreen() {
     setIsPopupVisible(false);
   };
 
+  const getData = () => {
+    fetch();
+  };
+
   const renderRectangleWithCircle = (
     item: Rectangle,
     index: number,
