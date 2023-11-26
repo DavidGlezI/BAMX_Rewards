@@ -11,124 +11,50 @@ import {
   Dimensions,
   ActivityIndicator,
   TouchableOpacity,
+  EasingStatic,
 } from "react-native";
 import { useFetch } from "../../util/useApi";
 import Colors from "../../constants/Colors";
 import PopUpPromo from "../../components/PopUpPromo";
 
 interface Rectangle {
-  id: string;
-  mainText: string;
-  discountText: string;
-  pointsText: string;
-  image: any;
+  establishment_id: number;
+  promotion_id: number;
+  promotion_name: string;
+  promotion_image : string;
+  promotion_descriptive_text : string;
+  promotion_price : number;
 }
 
-const images = [
-  require("../../assets/images/QinLogo.png"),
-  require("../../assets/images/CarlsLogo.png"),
-  require("../../assets/images/CinepolisLogo.png"),
-  require("../../assets/images/LegoLogo.png"),
-  require("../../assets/images/NikeLogo.png"),
-  require("../../assets/images/KfcLogo.png"),
-];
+interface Establishment {
+  establishment_id: number;
+  establishment_name: string;
+  establishment_logo: string;
+  establishment_latitud: number;
+  establishment_longitud: number;
+}
 
-const rectangles: Rectangle[] = [
-  {
-    id: "1",
-    mainText: "Combo Infantil",
-    discountText: "20 % descuento",
-    pointsText: "25 puntos",
-    image: require("../../assets/images/ComboInfantil.png"),
-  },
-  {
-    id: "2",
-    mainText: "Refresco Refill",
-    discountText: "Gratis",
-    pointsText: "20 puntos",
-    image: require("../../assets/images/CarlsRefresco.png"),
-  },
-  {
-    id: "3",
-    mainText: "Palomitas Grandes",
-    discountText: "10 % descuento",
-    pointsText: "15 puntos",
-    image: require("../../assets/images/CinepolisPalomitas.png"),
-  },
-  {
-    id: "4",
-    mainText: "AT-AT",
-    discountText: "Gratis",
-    pointsText: "60 puntos",
-    image: require("../../assets/images/AT-AT.png"),
-  },
-  {
-    id: "5",
-    mainText: "NBA Los Angeles Lakers",
-    discountText: "15 % descuento",
-    pointsText: "30 puntos",
-    image: require("../../assets/images/NikeT-Shirt.png"),
-  },
-  {
-    id: "6",
-    mainText: "Cubeta Grande",
-    discountText: "20 % descuento",
-    pointsText: "35 puntos",
-    image: require("../../assets/images/BucketKfc.png"),
-  },
-  {
-    id: "7",
-    mainText: "Minibox",
-    discountText: "15 % descuento",
-    pointsText: "20 puntos",
-    image: require("../../assets/images/Mini-Box.png"),
-  },
-  {
-    id: "8",
-    mainText: "Western Bacon",
-    discountText: "10 % descuento",
-    pointsText: "30 puntos",
-    image: require("../../assets/images/CarlsWestern.png"),
-  },
-  {
-    id: "9",
-    mainText: "Hot Dog Jumbo",
-    discountText: "15 % descuento",
-    pointsText: "20 puntos",
-    image: require("../../assets/images/HotDogCinepolis.png"),
-  },
-  {
-    id: "10",
-    mainText: "Globo Terráqueo",
-    discountText: "10 % descuento",
-    pointsText: "30 puntos",
-    image: require("../../assets/images/Globo-Terraqueo.png"),
-  },
-  {
-    id: "11",
-    mainText: "Nike Air Winflo 9",
-    discountText: "5 % descuento",
-    pointsText: "10 puntos",
-    image: require("../../assets/images/NikeShoe.png"),
-  },
-  {
-    id: "12",
-    mainText: "Mac N Cheese Bowl",
-    discountText: "20 % descuento",
-    pointsText: "25 puntos",
-    image: require("../../assets/images/MacNCheeseKfc.png"),
-  },
-];
 
 export default function TabPromotionsScreen() {
-  const half = Math.ceil(rectangles.length / 2);
-  const firstRowRectangles = rectangles.slice(0, half);
-  const secondRowRectangles = rectangles.slice(half);
   const { data, error, loading, fetch } = useFetch("restaurants");
+  const {
+    data: promoData,
+    error: promoError,
+    loading: promoLoading,
+    fetch: promoFetch,
+  } = useFetch("promotions");
+
+  useEffect(() => {
+    fetch();
+    promoFetch();
+  }, []);
+
+  
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedRectangle, setSelectedRectangle] = useState<Rectangle | null>(
     null
   );
+
   const openPopup = (rectangle: Rectangle) => {
     setSelectedRectangle(rectangle);
     setIsPopupVisible(true);
@@ -138,39 +64,6 @@ export default function TabPromotionsScreen() {
     setIsPopupVisible(false);
   };
 
-  const getData = () => {
-    fetch();
-  };
-
-  const renderRectangleWithCircle = (
-    item: Rectangle,
-    index: number,
-    isFirst: boolean
-  ) => (
-    <TouchableOpacity
-      onPress={() => openPopup(item)}
-      style={[styles.rectangleContainer, isFirst && { marginLeft: 20 }]}
-      key={item.id}
-    >
-      <View style={styles.smallCircle}>
-        <Image
-          source={images[index % images.length]}
-          style={styles.smallImage}
-        />
-      </View>
-      <View style={styles.rectangle}>
-        <Image source={item.image} style={styles.rectangleImage} />
-        <Text style={styles.rectangleTextMain}>{item.mainText}</Text>
-        <Text style={styles.rectangleTextDiscount}>{item.discountText}</Text>
-        <Text style={styles.rectangleTextPoints}>{item.pointsText}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-
-  useEffect(() => {
-    fetch();
-  }, []);
-
   return (
     <SafeAreaView style={styles.container}>
       <HeaderImage />
@@ -178,22 +71,27 @@ export default function TabPromotionsScreen() {
       <ScrollView
         // scrollEnabled={false}
         refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={fetch} />
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={() => (fetch(), promoFetch())}
+          />
         }
       >
-        {error ? (
+        {error || promoError ? (
           <Text style={{ marginTop: Dimensions.get("window").height / 5 }}>
             Sorry there was an error loading your data
           </Text>
-        ) : loading ? (
+        ) : loading || promoLoading ? (
           <ActivityIndicator
             style={{ marginTop: Dimensions.get("window").height / 5 }}
             size="large"
             color={Colors["light"].tint}
           />
         ) : (
-          data && (
+          data &&
+          promoData && (
             <>
+              
               <Text
                 style={{
                   ...styles.establecimientosTitle,
@@ -207,17 +105,22 @@ export default function TabPromotionsScreen() {
                 contentContainerStyle={styles.circlesContainer}
                 showsHorizontalScrollIndicator={false}
               >
-                {images.map((image, index) => (
-                  <View
-                    key={String(index)}
-                    style={[
-                      styles.circle,
-                      index === 0 ? { marginLeft: 35 } : {},
-                    ]}
-                  >
-                    <Image source={image} style={styles.image} />
-                  </View>
-                ))}
+                {data?.map((d: Establishment) => {
+                  return (
+                    <View
+                      key={String(d?.establishment_id)}
+                      style={[
+                        styles.circle,
+                        d?.establishment_id === 0 ? { marginLeft: 35 } : {},
+                      ]}
+                    >
+                      <Image
+                        source={{ uri: d?.establishment_logo }}
+                        style={styles.image}
+                      />
+                    </View>
+                  );
+                })}
               </ScrollView>
               <Text style={styles.promocionesTitle}>PROMOCIONES</Text>
               <ScrollView
@@ -226,13 +129,45 @@ export default function TabPromotionsScreen() {
               >
                 <View>
                   <View style={styles.promotionsRow}>
-                    {firstRowRectangles.map((item, index) =>
-                      renderRectangleWithCircle(item, index, index === 0)
+                    {promoData?.slice(0,Math.ceil(promoData?.length / 2)).map((item: any,index :number) =>
+                        (
+                        <TouchableOpacity
+                          onPress={() => openPopup(item)}
+                          style={[styles.rectangleContainer, index === 0 && { marginLeft: 20 }]}
+                          key={item.establishment_id}
+                        >
+                          <View style={styles.smallCircle}>
+                            <Image source={{ uri: data[item.establishment_id-1].establishment_logo }} style={styles.smallImage} />
+                          </View>
+                          <View style={styles.rectangle}>
+                            <Image source={{uri: item.promotion_image}} style={styles.rectangleImage} />
+                            <Text style={styles.rectangleTextMain}>{item.promotion_name}</Text>
+                            <Text style={styles.rectangleTextDiscount}>{item.promotion_descriptive_text}</Text>
+                            <Text style={styles.rectangleTextPoints}>{item.promotion_price}</Text>
+                          </View>
+                        </TouchableOpacity>
+                      )
                     )}
                   </View>
                   <View style={styles.promotionsRow}>
-                    {secondRowRectangles.map((item, index) =>
-                      renderRectangleWithCircle(item, index, index === 0)
+                    {promoData?.slice(Math.ceil(promoData?.length / 2)).map((item: any,index :number) =>
+                      (
+                        <TouchableOpacity
+                          onPress={() => openPopup(item)}
+                          style={[styles.rectangleContainer, index === 0 && { marginLeft: 20 }]}
+                          key={item.establishment_id}
+                        >
+                          <View style={styles.smallCircle}>
+                            <Image source={{ uri: data[item.establishment_id-1].establishment_logo }} style={styles.smallImage} />
+                          </View>
+                          <View style={styles.rectangle}>
+                            <Image source={{uri: item.promotion_image}} style={styles.rectangleImage} />
+                            <Text style={styles.rectangleTextMain}>{item.promotion_name}</Text>
+                            <Text style={styles.rectangleTextDiscount}>{item.promotion_descriptive_text}</Text>
+                            <Text style={styles.rectangleTextPoints}>{item.promotion_price}</Text>
+                          </View>
+                        </TouchableOpacity>
+                      )
                     )}
                   </View>
                 </View>
