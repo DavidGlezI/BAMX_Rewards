@@ -28,10 +28,10 @@ const PopUpPromo = ({ isVisible, onClose, rectangle }) => {
             <Text style={styles.headerText}>Canjear Recompensa</Text>
           </View>
           <Text style={styles.pointsAccumulated}>Tienes $ 200 puntos</Text>
-          <Image source={rectangle.image} style={styles.image} />
-          <Text style={styles.mainText}>{rectangle.mainText}</Text>
-          <Text style={styles.discountText}>{rectangle.discountText}</Text>
-          <Text style={styles.pointsText}>{rectangle.pointsText}</Text>
+          <Image source={ {uri: rectangle.promotion_image}} style={styles.image} />
+          <Text style={styles.mainText}>{rectangle.promotion_name}</Text>
+          <Text style={styles.discountText}>{rectangle.promotion_descriptive_text}</Text>
+          <Text style={styles.pointsText}>{rectangle.promotion_price}</Text>
           <TouchableOpacity onPress={() => {}} style={styles.redeemButton}>
             <Text style={styles.redeemButtonText}>Canjear</Text>
           </TouchableOpacity>
@@ -101,8 +101,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   image: {
-    width: 125,
-    height: 125,
+    width: 110,
+    height: 110,
     resizeMode: "contain",
     marginTop: 10,
     marginBottom: 16,
