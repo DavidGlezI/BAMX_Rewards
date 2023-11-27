@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   View,
@@ -8,46 +8,64 @@ import {
   Image,
 } from "react-native";
 
+
 interface PopUpPromoProps {
   isVisible: boolean;
   onClose: () => void;
   rectangle: Rectangle;
+  onRedeem: () => void;
 }
 
 const PopUpPromo: React.FC<PopUpPromoProps> = ({
   isVisible,
   onClose,
   rectangle,
+  onRedeem,
 }) => {
   if (!isVisible) return null;
 
+  const handleRedeem = () => {
+    onRedeem();
+  };
   return (
-    <Modal
-      transparent={true}
-      animationType="fade"
-      visible={isVisible}
-      onRequestClose={onClose}
-    >
-      <TouchableOpacity
-        style={styles.centeredView}
-        activeOpacity={1}
-        onPressOut={onClose}
+    <>
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={isVisible}
+        onRequestClose={onClose}
       >
-        <View style={styles.modalView}>
-          <View style={styles.header}>
-            <Text style={styles.headerText}>Canjear Recompensa</Text>
+        <TouchableOpacity
+          style={styles.centeredView}
+          activeOpacity={1}
+          onPressOut={onClose}
+        >
+          <View style={styles.modalView}>
+            <View style={styles.header}>
+              <Text style={styles.headerText}>Canjear Recompensa</Text>
+            </View>
+            <Text style={styles.pointsAccumulated}>Tienes $ 200 puntos</Text>
+            <Image
+              source={{ uri: rectangle.promotion_image }}
+              style={styles.image}
+            />
+            <Text style={styles.mainText}>{rectangle.promotion_name}</Text>
+            <Text style={styles.discountText}>
+              {rectangle.promotion_descriptive_text}
+            </Text>
+            <Text style={styles.pointsText}>
+              {rectangle.promotion_price} Puntos
+            </Text>
+            <TouchableOpacity
+              onPress={handleRedeem}
+              style={styles.redeemButton}
+            >
+              <Text style={styles.redeemButtonText}>Canjear</Text>
+            </TouchableOpacity>
           </View>
-          <Text style={styles.pointsAccumulated}>Tienes $ 200 puntos</Text>
-          <Image source={ {uri: rectangle.promotion_image}} style={styles.image} />
-          <Text style={styles.mainText}>{rectangle.promotion_name}</Text>
-          <Text style={styles.discountText}>{rectangle.promotion_descriptive_text}</Text>
-          <Text style={styles.pointsText}>{rectangle.promotion_price}</Text>
-          <TouchableOpacity onPress={() => {}} style={styles.redeemButton}>
-            <Text style={styles.redeemButtonText}>Canjear</Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-    </Modal>
+        </TouchableOpacity>
+      </Modal>
+    </>
   );
 };
 

@@ -15,6 +15,7 @@ import {
 import { useFetch } from "../../util/useApi";
 import Colors from "../../constants/Colors";
 import PopUpPromo from "../../components/PopUpPromo";
+import QRPopup from "../../components/QRPopup";
 
 interface Rectangle {
   establishment_id: number;
@@ -47,6 +48,7 @@ export default function TabHomeScreen() {
     promoFetch();
   }, []);
 
+  const [isQrPopupVisible, setIsQrPopupVisible] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedRectangle, setSelectedRectangle] = useState<Rectangle | null>(
     null
@@ -60,6 +62,15 @@ export default function TabHomeScreen() {
     setIsPopupVisible(false);
   };
 
+  const openQrPopup = () => {
+    setIsPopupVisible(false); 
+    setIsQrPopupVisible(true); 
+  };
+
+  const closeQrPopup = () => {
+    setIsQrPopupVisible(false);
+    setSelectedRectangle(null);
+  };
 
   useEffect(() => {
     fetch();
@@ -130,7 +141,7 @@ export default function TabHomeScreen() {
                             <Image source={{uri: item.promotion_image}} style={styles.rectangleImage} />
                             <Text style={styles.rectangleTextMain}>{item.promotion_name}</Text>
                             <Text style={styles.rectangleTextDiscount}>{item.promotion_descriptive_text}</Text>
-                            <Text style={styles.rectangleTextPoints}>{item.promotion_price}</Text>
+                            <Text style={styles.rectangleTextPoints}>{item.promotion_price} Puntos</Text>
                           </View>
                         </TouchableOpacity>
                       )
@@ -199,8 +210,14 @@ export default function TabHomeScreen() {
           isVisible={isPopupVisible}
           onClose={closePopup}
           rectangle={selectedRectangle}
+          onRedeem={openQrPopup}
         />
       )}
+      <QRPopup
+        isVisible={isQrPopupVisible}
+        onClose={closeQrPopup}
+        rectangle={selectedRectangle}
+      />
     </SafeAreaView>
   );
 }
