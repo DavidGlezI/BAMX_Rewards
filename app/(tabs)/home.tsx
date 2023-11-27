@@ -121,7 +121,7 @@ export default function TabHomeScreen() {
                         <TouchableOpacity
                           onPress={() => openPopup(item)}
                           style={[styles.rectangleContainer, index === 0 && { marginLeft: 20 }]}
-                          key={item.establishment_id}
+                          key={item.promotion_id}
                         >
                           <View style={styles.smallCircle}>
                             <Image source={{ uri: data[item.establishment_id-1].establishment_logo }} style={styles.smallImage} />

@@ -11,6 +11,8 @@ import {
   Image,
   ActivityIndicator,
   Dimensions,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import { useUpdateCreate } from "../util/useApi";
 import { Text, View } from "../components/Themed";
@@ -25,6 +27,11 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [isFocused2, setIsFocused2] = useState(false);
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const { response: response2, error:errorResend, loading:loadingResend, create: createResend } = useUpdateCreate("verify", {
+    user_email: email,
+  });
+
   const { response, error, loading, create } = useUpdateCreate("user/login", {
     user_email: email,
     user_password: password,
@@ -35,13 +42,34 @@ export default function LoginScreen() {
       `being called with values load: ${loading} error: ${error} response: ${response}`
     );
     if (!loading && !error && response?.status === 200) {
+      setIsPopupVisible(false);
       console.log(response.data["access-token"]);
       save("access-token", response.data["access-token"]);
       router.push("/home");
-    } else if (!loading && error) {
+    } 
+    else if (!loading && error?.response.status === 403){
+      setIsPopupVisible(true);
+      console.log(error.response.data); 
+      setPassword("");
+    }
+    else if (!loading && error) {
+      setIsPopupVisible(false);
+      console.log(error.response.data); 
       setPassword("");
     }
   }, [response, loading]);
+  const openPopup = () => {
+    setIsPopupVisible(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupVisible(false);
+  };
+
+  const handlePress = () => {
+    createResend();
+    setIsPopupVisible(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -93,8 +121,31 @@ export default function LoginScreen() {
             <Text style={styles.buttonText}>Iniciar Sesión</Text>
           </TouchableHighlight>
         )}
+        {error && !loading && !isFocused && !isFocused2 && error.response.status === 403 ? (
+        <Modal
+        transparent={true}
+        animationType="fade"
+        visible = {isPopupVisible}
+        onRequestClose={closePopup}
+      >
+        <TouchableOpacity
+          style={styles.centeredView}
+          activeOpacity={1}
+          onPressOut={closePopup}
+        >
+          <View style={styles.modalView}>
+            <View style={styles.header}>
+              <Text style={styles.headerText}>Reenviar Email</Text>
+            </View>
 
-        {error && !isFocused && !isFocused2 && (
+            <Text style={styles.mainText}> Haz click en el boton para reenviar el email de verificacion</Text>
+            <TouchableOpacity onPress={() => handlePress()} style={styles.redeemButton}>
+              <Text style={styles.redeemButtonText}>Reenviar</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+        ) : (
           <Text style={styles.errorText}>
             Credenciales incorrectas intente de nuevo
           </Text>
@@ -108,6 +159,76 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
+  redeemButton: {
+    backgroundColor: "#E6012E",
+    borderRadius: 30,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginTop: 0,
+    marginBottom: 5,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+  },
+
+  redeemButtonText: {
+    color: "white",
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+  mainText: {
+    textAlign: "center",
+    fontSize: 18,
+    color: "#000",
+    fontWeight: "bold",
+    marginTop: 25,
+    marginBottom: 10,
+  },
+  modalView: {
+    width: 300,
+    height: 200,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    overflow: "hidden",
+  },
+  header: {
+    backgroundColor: "#E6012E",
+    width: "200%",
+    height: 50,
+    position: "absolute",
+    top: 0,
+    borderTopStartRadius: 15,
+    borderTopEndRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  headerText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+  },
   errorText: {
     color: "red",
     textAlign: "center",
