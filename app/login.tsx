@@ -262,6 +262,7 @@ const styles = StyleSheet.create({
     width: 240,
   },
   subTitle: {
+    color: "red",
     marginTop: 10,
     marginBottom: 60,
     fontSize: 14,
