@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Alert } from 'react-native';
 import { HeaderImage } from "../../components/HeaderImage";
 import {
   StyleSheet,
@@ -45,12 +46,32 @@ export default function TabPromotionsScreen() {
     fetch: promoFetch,
   } = useFetch("promotions");
 
+  const {
+    data: userData,
+    error: userError,
+    loading: userLoading,
+    fetch: userFetch,
+  } = useFetch("user");
+
   useEffect(() => {
     fetch();
+    userFetch();
     promoFetch();
   }, []);
-  
 
+  useEffect(() => {
+    fetch();
+    userFetch();
+    promoFetch();
+  }, []);
+
+  useEffect(() => {
+    if (userData?.user_points) {
+      setPoints(userData.user_points);
+    }
+  }, [userData]);
+  
+  const [points, setPoints]= useState (0)
   const [isQrPopupVisible, setIsQrPopupVisible] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedRectangle, setSelectedRectangle] = useState<Rectangle | null>(
@@ -66,10 +87,16 @@ export default function TabPromotionsScreen() {
     setIsPopupVisible(false);
   };
 
-  const openQrPopup = () => {
+  const openQrPopup = (price: number) => {
+    if (points < price) {
+      Alert.alert("Error", "No tienes suficientes puntos para canjear esta promoción.");
+      return;
+    }
     setIsPopupVisible(false); 
-    setIsQrPopupVisible(true); 
+    setIsQrPopupVisible(true);
+    setPoints((prev) => prev - price);
   };
+  
 
   const closeQrPopup = () => {
     setIsQrPopupVisible(false);
@@ -89,11 +116,11 @@ export default function TabPromotionsScreen() {
           />
         }
       >
-        {error || promoError ? (
+        {error || promoError || userError ? (
           <Text style={{ marginTop: Dimensions.get("window").height / 5 }}>
             Sorry there was an error loading your data
           </Text>
-        ) : loading || promoLoading ? (
+        ) : loading || promoLoading || userLoading ? (
           <ActivityIndicator
             style={{ marginTop: Dimensions.get("window").height / 5 }}
             size="large"
@@ -117,10 +144,10 @@ export default function TabPromotionsScreen() {
                 contentContainerStyle={styles.circlesContainer}
                 showsHorizontalScrollIndicator={false}
               >
-                {data?.map((d: Establishment) => {
+                {data?.map((d: Establishment, index:number) => {
                   return (
                     <View
-                      key={String(d?.establishment_id)}
+                      key={index }
                       style={[
                         styles.circle,
                         d?.establishment_id === 0 ? { marginLeft: 35 } : {},
@@ -146,7 +173,7 @@ export default function TabPromotionsScreen() {
                         <TouchableOpacity
                           onPress={() => openPopup(item)}
                           style={[styles.rectangleContainer, index === 0 && { marginLeft: 20 }]}
-                          key={item.promotion_id}
+                          key={index + 90}
                         >
                           <View style={styles.smallCircle}>
                             <Image source={{ uri: data[item.establishment_id-1].establishment_logo }} style={styles.smallImage} />
@@ -167,7 +194,7 @@ export default function TabPromotionsScreen() {
                         <TouchableOpacity
                           onPress={() => openPopup(item)}
                           style={[styles.rectangleContainer, index === 0 && { marginLeft: 20 }]}
-                          key={item.establishment_id}
+                          key={index}
                         >
                           <View style={styles.smallCircle}>
                             <Image source={{ uri: data[item.establishment_id-1].establishment_logo }} style={styles.smallImage} />
@@ -194,12 +221,14 @@ export default function TabPromotionsScreen() {
           onClose={closePopup}
           rectangle={selectedRectangle}
           onRedeem={openQrPopup}
+          points={points}
         />
       )}
       <QRPopup
         isVisible={isQrPopupVisible}
         onClose={closeQrPopup}
         rectangle={selectedRectangle}
+        points={points}
       />
     </SafeAreaView>
   );
