@@ -75,6 +75,17 @@ function RootLayoutNav() {
           ),
         }}
       />
+      <Stack.Screen
+        name="about"
+        options={{
+          title: "¿Quiénes somos?",
+          headerLeft: () => (
+            <Pressable onPress={() => router.back()}>
+              <AntDesign name="arrowleft" size={24} color="black" />
+            </Pressable>
+          ),
+        }}
+      />
     </Stack>
   );
 }
