@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Image,
   Dimensions,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useUpdateCreate } from "../util/useApi";
 
@@ -17,11 +18,14 @@ import Colors from "../constants/Colors";
 
 export default function RegisterScreen() {
   const [email, setEmail] = useState("");
+  const [isEmailValid, setIsEmailValid] = useState(false);
   const [password, setPassword] = useState("");
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [name, setName] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [isFocused1, setIsFocused1] = useState(false);
   const [isFocused2, setIsFocused2] = useState(false);
+  
   const { response, error, loading, create } = useUpdateCreate(
     "user/register",
     {
@@ -30,6 +34,23 @@ export default function RegisterScreen() {
       user_password: password,
     }
   );
+
+  const textStyles = isEmailValid ? styles.validText : styles.invalidText;
+  const textStyles2 = isPasswordValid ? styles.validText : styles.invalidText;
+  const validPwdEmail = isEmailValid && isPasswordValid;
+  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  const passwordRegex = /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$/;
+  const handleEmailChange = (text:string) => {
+    setEmail(text);
+    // Validar el correo electrónico y actualizar el estado
+    setIsEmailValid(emailRegex.test(text));
+  };
+
+  const handlePasswordChange = (text:string) => {
+    setPassword(text);
+    // Validar el correo electrónico y actualizar el estado
+    setIsPasswordValid(passwordRegex.test(text));
+  };
 
   useEffect(() => {
     console.log(response);
@@ -40,6 +61,10 @@ export default function RegisterScreen() {
   }, [response, loading]);
 
   return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
     <View style={styles.container}>
       <Image
         source={require("../assets/images/background1.png")}
@@ -50,6 +75,7 @@ export default function RegisterScreen() {
         <Text style={styles.subTitle} onPress={() => router.replace("/login")}>
           o Iniciar sesión
         </Text>
+          
         <TextInput
           placeholder="Nombre y Apellido"
           placeholderTextColor="gray"
@@ -66,7 +92,7 @@ export default function RegisterScreen() {
           placeholder="Correo Electrónico"
           placeholderTextColor="gray"
           value={email}
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={handleEmailChange}
           style={[
             styles.input,
             { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
@@ -74,6 +100,7 @@ export default function RegisterScreen() {
           onFocus={() => setIsFocused2(true)}
           onBlur={() => setIsFocused2(false)}
         />
+        <Text style={textStyles}>{isEmailValid ? 'Válido' : 'No válido'}</Text>
         <TextInput
           placeholderTextColor="gray"
           style={[
@@ -82,23 +109,33 @@ export default function RegisterScreen() {
           ]}
           placeholder="Contraseña"
           value={password}
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={handlePasswordChange}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           secureTextEntry
         />
-        <TouchableHighlight style={styles.loginBtn} onPress={create}>
-          <Text style={styles.buttonText}>Continuar</Text>
-        </TouchableHighlight>
+        <Text style={textStyles2}>{isPasswordValid ? 'Válido' : 'No válido'}</Text>
+        { !isFocused && !isFocused1 && !isFocused2 &&(
+          <TouchableHighlight style={validPwdEmail ? styles.loginBtn : styles.disabledBtn} onPress={create} disabled={!validPwdEmail}>
+            <Text style={styles.buttonText}>Continuar</Text>
+          </TouchableHighlight>
+        )}
       </View>
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
     </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  validText: {
+    color: 'green',
+  },
+  invalidText: {
+    color: 'red',
+  },
   container: {
     flex: 1,
     alignItems: "center",
@@ -125,7 +162,17 @@ const styles = StyleSheet.create({
     height: 55,
     width: 240,
   },
+  disabledBtn: {
+    backgroundColor: 'gray', 
+    borderRadius: 40,
+    alignSelf: "center",
+    justifyContent: "center",
+    marginTop: 20,
+    height: 55,
+    width: 240,
+  },
   subTitle: {
+    color: "red",
     marginTop: 10,
     marginBottom: 30,
     fontSize: 14,

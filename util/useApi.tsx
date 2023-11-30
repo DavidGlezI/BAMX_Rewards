@@ -53,9 +53,11 @@ export function useUpdateCreate(url: string, payload: any) {
       console.log(`Calling post function to ${url} with payload: ${payload}`);
       setError(null);
       setLoading(true);
+      const jwtToken = await getValueFor("access-token");
       const response = await axios.post(API_BASE_URL + url, payload, {
         headers: {
           "x-api-key": API_KEY,
+          "access-token": jwtToken,
           "Content-Type": "application/json",
         },
       });
@@ -83,6 +85,7 @@ export function useUpdateCreate(url: string, payload: any) {
       });
       setResponse(response);
     } catch (err: any) {
+      console.log("error in update call");
       setError(err);
     } finally {
       setLoading(false);
