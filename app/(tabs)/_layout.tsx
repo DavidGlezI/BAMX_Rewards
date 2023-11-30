@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import TabPromotionsScreen from "./promotions";
 import { Link, Tabs } from "expo-router";
 import { Feather, AntDesign, Octicons, Ionicons } from "@expo/vector-icons";
 import {
@@ -13,6 +14,7 @@ import {
 } from "react-native";
 import { HeaderImage } from "../../components/HeaderImage";
 import Colors from "../../constants/Colors";
+import { useUpdateCreate } from "../../util/useApi";
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -46,7 +48,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      
+
       <Tabs.Screen
         name="account"
         options={{

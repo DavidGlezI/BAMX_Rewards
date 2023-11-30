@@ -29,7 +29,12 @@ export default function LoginScreen() {
   const [isFocused, setIsFocused] = useState(false);
   const [isFocused2, setIsFocused2] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const { response: response2, error:errorResend, loading:loadingResend, create: createResend } = useUpdateCreate("verify", {
+  const {
+    response: response2,
+    error: errorResend,
+    loading: loadingResend,
+    create: createResend,
+  } = useUpdateCreate("verify", {
     user_email: email,
   });
 
@@ -47,15 +52,13 @@ export default function LoginScreen() {
       console.log(response.data["access-token"]);
       save("access-token", response.data["access-token"]);
       router.push("/home");
-    } 
-    else if (!loading && error?.response.status === 403){
+    } else if (!loading && error?.response.status === 403) {
       setIsPopupVisible(true);
-      console.log(error.response.data); 
+      console.log(error.response.data);
       setPassword("");
-    }
-    else if (!loading && error) {
+    } else if (!loading && error) {
       setIsPopupVisible(false);
-      console.log(error.response.data); 
+      console.log(error.response.data);
       setPassword("");
     }
   }, [response, loading]);
@@ -74,92 +77,107 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
     >
-    <View style={styles.container}>
-      <Image
-        source={require("../assets/images/background1.png")}
-        style={styles.image}
-      />
-      <View style={styles.loginContaier}>
-        <Text style={styles.title}>Iniciar sesión</Text>
-        <Text
-          style={styles.subTitle}
-          onPress={() => router.replace("/register")}
-        >
-          o Únete a BAMX
-        </Text>
-        <TextInput
-          placeholder="Correo Electrónico"
-          placeholderTextColor="gray"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={[
-            styles.input,
-            { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
-          ]}
-          onFocus={() => setIsFocused2(true)}
-          onBlur={() => setIsFocused2(false)}
+      <View style={styles.container}>
+        <Image
+          source={require("../assets/images/background1.png")}
+          style={styles.image}
         />
-        <TextInput
-          style={[
-            styles.input,
-            { borderColor: isFocused ? Colors["light"].tint : "#CCCCCC" },
-          ]}
-          placeholder="Contraseña"
-          placeholderTextColor="gray"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          secureTextEntry
-        />
-        {loading ? (
-          <ActivityIndicator
-            style={{ marginTop: 10 }}
-            size="small"
-            color={Colors["light"].tint}
-          />
-        ) : !isFocused && !isFocused2 && (
-          <TouchableHighlight style={styles.loginBtn} onPress={create}>
-            <Text style={styles.buttonText}>Iniciar Sesión</Text>
-          </TouchableHighlight>
-        )}
-        {error && !loading && !isFocused && !isFocused2 && error.response.status === 403 ? (
-        <Modal
-        transparent={true}
-        animationType="fade"
-        visible = {isPopupVisible}
-        onRequestClose={closePopup}
-      >
-        <TouchableOpacity
-          style={styles.centeredView}
-          activeOpacity={1}
-          onPressOut={closePopup}
-        >
-          <View style={styles.modalView}>
-            <View style={styles.header}>
-              <Text style={styles.headerText}>Reenviar Email</Text>
-            </View>
-
-            <Text style={styles.mainText}> Haz click en el boton para reenviar el email de verificacion</Text>
-            <TouchableOpacity onPress={() => handlePress()} style={styles.redeemButton}>
-              <Text style={styles.redeemButtonText}>Reenviar</Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      </Modal>
-        ) : (
-          <Text style={styles.errorText}>
-            Credenciales incorrectas intente de nuevo
+        <View style={styles.loginContaier}>
+          <Text style={styles.title}>Iniciar sesión</Text>
+          <Text
+            style={styles.subTitle}
+            onPress={() => router.replace("/register")}
+          >
+            o Únete a BAMX
           </Text>
-        )}
-      </View>
+          <TextInput
+            placeholder="Correo Electrónico"
+            placeholderTextColor="gray"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            style={[
+              styles.input,
+              { borderColor: isFocused2 ? Colors["light"].tint : "#CCCCCC" },
+            ]}
+            onFocus={() => setIsFocused2(true)}
+            onBlur={() => setIsFocused2(false)}
+          />
+          <TextInput
+            style={[
+              styles.input,
+              { borderColor: isFocused ? Colors["light"].tint : "#CCCCCC" },
+            ]}
+            placeholder="Contraseña"
+            placeholderTextColor="gray"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            secureTextEntry
+          />
+          {loading ? (
+            <ActivityIndicator
+              style={{ marginTop: 10 }}
+              size="small"
+              color={Colors["light"].tint}
+            />
+          ) : (
+            !isFocused &&
+            !isFocused2 && (
+              <TouchableHighlight style={styles.loginBtn} onPress={create}>
+                <Text style={styles.buttonText}>Iniciar Sesión</Text>
+              </TouchableHighlight>
+            )
+          )}
+          {error &&
+          !loading &&
+          !isFocused &&
+          !isFocused2 &&
+          error.response.status === 403 ? (
+            <Modal
+              transparent={true}
+              animationType="fade"
+              visible={isPopupVisible}
+              onRequestClose={closePopup}
+            >
+              <TouchableOpacity
+                style={styles.centeredView}
+                activeOpacity={1}
+                onPressOut={closePopup}
+              >
+                <View style={styles.modalView}>
+                  <View style={styles.header}>
+                    <Text style={styles.headerText}>Reenviar Email</Text>
+                  </View>
 
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
-    </View>
+                  <Text style={styles.mainText}>
+                    {" "}
+                    Haz click en el boton para reenviar el email de verificacion
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => handlePress()}
+                    style={styles.redeemButton}
+                  >
+                    <Text style={styles.redeemButtonText}>Reenviar</Text>
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+            </Modal>
+          ) : (
+            error?.response.status === 401 && (
+              <Text style={styles.errorText}>
+                Credenciales incorrectas intente de nuevo
+              </Text>
+            )
+          )}
+        </View>
+
+        {/* Use a light status bar on iOS to account for the black space above the modal */}
+        <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+      </View>
     </KeyboardAvoidingView>
   );
 }

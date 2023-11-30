@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Alert } from 'react-native';
+import { Alert } from "react-native";
 import { HeaderImage } from "../../components/HeaderImage";
 import {
   StyleSheet,
@@ -13,7 +13,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import { useFetch } from "../../util/useApi";
+import { useFetch, useUpdateCreate } from "../../util/useApi";
 import Colors from "../../constants/Colors";
 import PopUpPromo from "../../components/PopUpPromo";
 import QRPopup from "../../components/QRPopup";
@@ -22,9 +22,9 @@ interface Rectangle {
   establishment_id: number;
   promotion_id: number;
   promotion_name: string;
-  promotion_image : string;
-  promotion_descriptive_text : string;
-  promotion_price : number;
+  promotion_image: string;
+  promotion_descriptive_text: string;
+  promotion_price: number;
 }
 
 interface Establishment {
@@ -36,6 +36,14 @@ interface Establishment {
 }
 
 export default function TabHomeScreen() {
+  const [points, setPoints] = useState(0);
+  const [isQrPopupVisible, setIsQrPopupVisible] = useState(false);
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [selectedRectangle, setSelectedRectangle] = useState<Rectangle | null>(
+    null
+  );
+  const [currentPrice, setCurrentPrice] = useState(0);
+
   const { data, error, loading, fetch } = useFetch("restaurants");
   const {
     data: promoData,
@@ -45,16 +53,18 @@ export default function TabHomeScreen() {
   } = useFetch("promotions");
 
   const {
+    response,
+    error: updateTokenError,
+    loading: updateTokenLoading,
+    update,
+  } = useUpdateCreate(`user/addPoints/${currentPrice}`, {});
+
+  const {
     data: userData,
     error: userError,
     loading: userLoading,
     fetch: userFetch,
   } = useFetch("user");
-
-  useEffect(() => {
-    fetch();
-    promoFetch();
-  }, []);
 
   useEffect(() => {
     fetch();
@@ -68,12 +78,18 @@ export default function TabHomeScreen() {
     }
   }, [userData]);
 
-  const [points, setPoints]= useState (0)
-  const [isQrPopupVisible, setIsQrPopupVisible] = useState(false);
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [selectedRectangle, setSelectedRectangle] = useState<Rectangle | null>(
-    null
-  );
+  // Update user point in db.
+  useEffect(() => {
+    if (currentPrice !== 0) {
+      const updatePoints = async () => {
+        await update();
+        await userFetch();
+        setCurrentPrice(0);
+      };
+      updatePoints();
+    }
+  }, [currentPrice]);
+
   const openPopup = (rectangle: Rectangle) => {
     setSelectedRectangle(rectangle);
     setIsPopupVisible(true);
@@ -85,22 +101,25 @@ export default function TabHomeScreen() {
 
   const openQrPopup = (price: number) => {
     if (points < price) {
-      Alert.alert("Error", "No tienes suficientes puntos para canjear esta promoción.");
+      Alert.alert(
+        "Error",
+        "No tienes suficientes puntos para canjear esta promoción."
+      );
       return;
     }
-    setIsPopupVisible(false); 
+    setIsPopupVisible(false);
     setIsQrPopupVisible(true);
-    setPoints((prev) => prev - price);
+    // Update points in db.
+    setCurrentPrice(price * -1);
+
+    // Update points in local state.
+    setPoints((prev: any) => prev - price);
   };
 
   const closeQrPopup = () => {
     setIsQrPopupVisible(false);
     setSelectedRectangle(null);
   };
-
-  useEffect(() => {
-    fetch();
-  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -109,7 +128,10 @@ export default function TabHomeScreen() {
       <ScrollView
         // scrollEnabled={false}
         refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={fetch} />
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={() => (fetch(), userFetch())}
+          />
         }
       >
         {error || promoError ? (
@@ -123,7 +145,7 @@ export default function TabHomeScreen() {
             color={Colors["light"].tint}
           />
         ) : (
-          data && 
+          data &&
           promoData && (
             <>
               <View
@@ -141,8 +163,8 @@ export default function TabHomeScreen() {
                         <Image source={require("../../assets/images/qr.png")} />
                       </View>
                     </View>
-                    <Text style={styles.pointsText}>{points} puntos</Text>
                   </View>
+                  <Text style={styles.pointsText}>{points} puntos</Text>
                 </View>
               </View>
 
@@ -153,25 +175,41 @@ export default function TabHomeScreen() {
               >
                 <View>
                   <View style={styles.promotionsRow}>
-                  {promoData?.map((item: Rectangle,index :number) =>
-                        (
-                        <TouchableOpacity
-                          onPress={() => openPopup(item)}
-                          style={[styles.rectangleContainer, index === 0 && { marginLeft: 20 }]}
-                          key={item.promotion_id+30}
-                        >
-                          <View style={styles.smallCircle}>
-                            <Image source={{ uri: data[item.establishment_id-1].establishment_logo }} style={styles.smallImage} />
-                          </View>
-                          <View style={styles.rectangle}>
-                            <Image source={{uri: item.promotion_image}} style={styles.rectangleImage} />
-                            <Text style={styles.rectangleTextMain}>{item.promotion_name}</Text>
-                            <Text style={styles.rectangleTextDiscount}>{item.promotion_descriptive_text}</Text>
-                            <Text style={styles.rectangleTextPoints}>{item.promotion_price} Puntos</Text>
-                          </View>
-                        </TouchableOpacity>
-                      )
-                    )}
+                    {promoData?.map((item: Rectangle, index: number) => (
+                      <TouchableOpacity
+                        onPress={() => openPopup(item)}
+                        style={[
+                          styles.rectangleContainer,
+                          index === 0 && { marginLeft: 20 },
+                        ]}
+                        key={item.promotion_id + 30}
+                      >
+                        <View style={styles.smallCircle}>
+                          <Image
+                            source={{
+                              uri: data[item.establishment_id - 1]
+                                .establishment_logo,
+                            }}
+                            style={styles.smallImage}
+                          />
+                        </View>
+                        <View style={styles.rectangle}>
+                          <Image
+                            source={{ uri: item.promotion_image }}
+                            style={styles.rectangleImage}
+                          />
+                          <Text style={styles.rectangleTextMain}>
+                            {item.promotion_name}
+                          </Text>
+                          <Text style={styles.rectangleTextDiscount}>
+                            {item.promotion_descriptive_text}
+                          </Text>
+                          <Text style={styles.rectangleTextPoints}>
+                            {item.promotion_price} Puntos
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    ))}
                   </View>
                 </View>
               </ScrollView>
@@ -350,9 +388,10 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   contentWrapper: {
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
   },
   circleWrapper: {
     flexDirection: "row",

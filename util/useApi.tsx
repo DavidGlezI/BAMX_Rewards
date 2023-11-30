@@ -3,9 +3,6 @@ import axios from "axios";
 import { API_BASE_URL, API_KEY } from "@env";
 import * as SecureStore from "expo-secure-store";
 
-
-
-
 async function getValueFor(key: string) {
   let result = await SecureStore.getItemAsync(key);
   if (result) {
@@ -53,7 +50,7 @@ export function useUpdateCreate(url: string, payload: any) {
 
   const create = useCallback(async () => {
     try {
-      console.log(`Calling post function to ${url} with payload: ${payload.amount}`);
+      console.log(`Calling post function to ${url} with payload: ${payload}`);
       setError(null);
       setLoading(true);
       const jwtToken = await getValueFor("access-token");
@@ -88,6 +85,7 @@ export function useUpdateCreate(url: string, payload: any) {
       });
       setResponse(response);
     } catch (err: any) {
+      console.log("error in update call");
       setError(err);
     } finally {
       setLoading(false);
