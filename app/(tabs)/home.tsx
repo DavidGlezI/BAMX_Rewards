@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Alert } from 'react-native';
 import { HeaderImage } from "../../components/HeaderImage";
 import {
   StyleSheet,
@@ -15,6 +16,7 @@ import {
 import { useFetch } from "../../util/useApi";
 import Colors from "../../constants/Colors";
 import PopUpPromo from "../../components/PopUpPromo";
+import QRPopup from "../../components/QRPopup";
 
 interface Rectangle {
   establishment_id: number;
@@ -42,11 +44,32 @@ export default function TabHomeScreen() {
     fetch: promoFetch,
   } = useFetch("promotions");
 
+  const {
+    data: userData,
+    error: userError,
+    loading: userLoading,
+    fetch: userFetch,
+  } = useFetch("user");
+
   useEffect(() => {
     fetch();
     promoFetch();
   }, []);
 
+  useEffect(() => {
+    fetch();
+    userFetch();
+    promoFetch();
+  }, []);
+
+  useEffect(() => {
+    if (userData?.user_points) {
+      setPoints(userData.user_points);
+    }
+  }, [userData]);
+
+  const [points, setPoints]= useState (0)
+  const [isQrPopupVisible, setIsQrPopupVisible] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedRectangle, setSelectedRectangle] = useState<Rectangle | null>(
     null
@@ -60,6 +83,20 @@ export default function TabHomeScreen() {
     setIsPopupVisible(false);
   };
 
+  const openQrPopup = (price: number) => {
+    if (points < price) {
+      Alert.alert("Error", "No tienes suficientes puntos para canjear esta promoción.");
+      return;
+    }
+    setIsPopupVisible(false); 
+    setIsQrPopupVisible(true);
+    setPoints((prev) => prev - price);
+  };
+
+  const closeQrPopup = () => {
+    setIsQrPopupVisible(false);
+    setSelectedRectangle(null);
+  };
 
   useEffect(() => {
     fetch();
@@ -104,7 +141,7 @@ export default function TabHomeScreen() {
                         <Image source={require("../../assets/images/qr.png")} />
                       </View>
                     </View>
-                    <Text style={styles.pointsText}>200 puntos</Text>
+                    <Text style={styles.pointsText}>{points} puntos</Text>
                   </View>
                 </View>
               </View>
@@ -121,7 +158,7 @@ export default function TabHomeScreen() {
                         <TouchableOpacity
                           onPress={() => openPopup(item)}
                           style={[styles.rectangleContainer, index === 0 && { marginLeft: 20 }]}
-                          key={item.promotion_id}
+                          key={item.promotion_id+30}
                         >
                           <View style={styles.smallCircle}>
                             <Image source={{ uri: data[item.establishment_id-1].establishment_logo }} style={styles.smallImage} />
@@ -130,7 +167,7 @@ export default function TabHomeScreen() {
                             <Image source={{uri: item.promotion_image}} style={styles.rectangleImage} />
                             <Text style={styles.rectangleTextMain}>{item.promotion_name}</Text>
                             <Text style={styles.rectangleTextDiscount}>{item.promotion_descriptive_text}</Text>
-                            <Text style={styles.rectangleTextPoints}>{item.promotion_price}</Text>
+                            <Text style={styles.rectangleTextPoints}>{item.promotion_price} Puntos</Text>
                           </View>
                         </TouchableOpacity>
                       )
@@ -199,8 +236,16 @@ export default function TabHomeScreen() {
           isVisible={isPopupVisible}
           onClose={closePopup}
           rectangle={selectedRectangle}
+          onRedeem={openQrPopup}
+          points={points}
         />
       )}
+      <QRPopup
+        isVisible={isQrPopupVisible}
+        onClose={closeQrPopup}
+        rectangle={selectedRectangle}
+        points={points}
+      />
     </SafeAreaView>
   );
 }
