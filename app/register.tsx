@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Image,
   Dimensions,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useUpdateCreate } from "../util/useApi";
 
@@ -60,6 +61,10 @@ export default function RegisterScreen() {
   }, [response, loading]);
 
   return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
     <View style={styles.container}>
       <Image
         source={require("../assets/images/background1.png")}
@@ -70,6 +75,7 @@ export default function RegisterScreen() {
         <Text style={styles.subTitle} onPress={() => router.replace("/login")}>
           o Iniciar sesión
         </Text>
+          
         <TextInput
           placeholder="Nombre y Apellido"
           placeholderTextColor="gray"
@@ -109,14 +115,17 @@ export default function RegisterScreen() {
           secureTextEntry
         />
         <Text style={textStyles2}>{isPasswordValid ? 'Válido' : 'No válido'}</Text>
-        <TouchableHighlight style={validPwdEmail ? styles.loginBtn : styles.disabledBtn} onPress={create} disabled={!validPwdEmail}>
-          <Text style={styles.buttonText}>Continuar</Text>
-        </TouchableHighlight>
+        { !isFocused && !isFocused1 && !isFocused2 &&(
+          <TouchableHighlight style={validPwdEmail ? styles.loginBtn : styles.disabledBtn} onPress={create} disabled={!validPwdEmail}>
+            <Text style={styles.buttonText}>Continuar</Text>
+          </TouchableHighlight>
+        )}
       </View>
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
     </View>
+    </KeyboardAvoidingView>
   );
 }
 

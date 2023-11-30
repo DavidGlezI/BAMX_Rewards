@@ -13,6 +13,7 @@ import {
   Dimensions,
   Modal,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useUpdateCreate } from "../util/useApi";
 import { Text, View } from "../components/Themed";
@@ -72,6 +73,10 @@ export default function LoginScreen() {
   };
 
   return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
     <View style={styles.container}>
       <Image
         source={require("../assets/images/background1.png")}
@@ -116,7 +121,7 @@ export default function LoginScreen() {
             size="small"
             color={Colors["light"].tint}
           />
-        ) : (
+        ) : !isFocused && !isFocused2 && (
           <TouchableHighlight style={styles.loginBtn} onPress={create}>
             <Text style={styles.buttonText}>Iniciar Sesión</Text>
           </TouchableHighlight>
@@ -155,6 +160,7 @@ export default function LoginScreen() {
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
     </View>
+    </KeyboardAvoidingView>
   );
 }
 
