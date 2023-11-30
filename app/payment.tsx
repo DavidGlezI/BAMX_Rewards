@@ -59,6 +59,10 @@ export default function Payment() {
   const { response, error, create } = useUpdateCreate("payment-sheet", {
     amount: amount2,
   });
+  const {response: responseWebhook, error: errorWebhook, loading: loadingResend, create: createWebhook,} = useUpdateCreate("webhook", {
+    amount: amount2,
+  });
+
 
   useEffect(() => {
     initialisePaymentSheet();
@@ -78,7 +82,7 @@ export default function Payment() {
         customerId: customer,
         customerEphemeralKeySecret: ephemeralKey,
         paymentIntentClientSecret: paymentIntent,
-        merchantDisplayName: "Example Inc.",
+        merchantDisplayName: "Bamx Rewards.",
         allowsDelayedPaymentMethods: true,
       });
       if (error) {
@@ -96,6 +100,13 @@ export default function Payment() {
       console.log(error);
     } else {
       setReady(false);
+      await createWebhook();
+      if (!responseWebhook) {
+        console.log("loading webhook response");
+      }
+      else{
+        console.log(responseWebhook);
+      }
     }
   }
 
