@@ -96,7 +96,7 @@ export default function TabAccountScreen() {
                     Sin historial de donaciones
                   </Text>
                 ) : (
-                  data?.map((d: any) => (
+                  data?.reverse().map((d: any) => (
                     <Donations
                       key={d?.donation_id}
                       id={d?.donation_id}
