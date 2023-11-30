@@ -13,7 +13,8 @@ interface PopUpPromoProps {
   isVisible: boolean;
   onClose: () => void;
   rectangle: Rectangle;
-  onRedeem: () => void;
+  onRedeem: any;
+  points: number;
 }
 
 const PopUpPromo: React.FC<PopUpPromoProps> = ({
@@ -21,12 +22,10 @@ const PopUpPromo: React.FC<PopUpPromoProps> = ({
   onClose,
   rectangle,
   onRedeem,
+  points,
 }) => {
   if (!isVisible) return null;
 
-  const handleRedeem = () => {
-    onRedeem();
-  };
   return (
     <>
       <Modal
@@ -44,7 +43,7 @@ const PopUpPromo: React.FC<PopUpPromoProps> = ({
             <View style={styles.header}>
               <Text style={styles.headerText}>Canjear Recompensa</Text>
             </View>
-            <Text style={styles.pointsAccumulated}>Tienes $ 200 puntos</Text>
+            <Text style={styles.pointsAccumulated}>Tienes $ {points} puntos</Text>
             <Image
               source={{ uri: rectangle.promotion_image }}
               style={styles.image}
@@ -57,7 +56,7 @@ const PopUpPromo: React.FC<PopUpPromoProps> = ({
               {rectangle.promotion_price} Puntos
             </Text>
             <TouchableOpacity
-              onPress={handleRedeem}
+              onPress={() => onRedeem(Number(rectangle.promotion_price))}
               style={styles.redeemButton}
             >
               <Text style={styles.redeemButtonText}>Canjear</Text>

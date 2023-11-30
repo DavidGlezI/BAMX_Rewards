@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   View,
@@ -12,18 +12,19 @@ interface QRPopupProps {
   isVisible: boolean;
   onClose: () => void;
   rectangle: Rectangle;
+  points: number;
 }
 
 const QRPopup: React.FC<QRPopupProps> = ({
   rectangle,
   isVisible,
   onClose,
+  points, 
 }) => {
   if (!isVisible) return null;
 
   const QRCodeImage = require("../assets/images/QRPromo.png");
-
-  const remainingPoints = 200 - rectangle.promotion_price;
+  
 
   return (
     <Modal
@@ -41,7 +42,7 @@ const QRPopup: React.FC<QRPopupProps> = ({
           <Text style={styles.mainText}>{rectangle.promotion_name}</Text>
           <Image source={QRCodeImage} style={styles.image} />
           <Text style={styles.pointsText}>
-            $ {remainingPoints} puntos restantes
+            $ {points} puntos restantes
           </Text>
           <View style={styles.header}>
             <Text style={styles.headerText}>Recompensa</Text>
