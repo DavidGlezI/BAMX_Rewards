@@ -16,7 +16,8 @@
     "ios": {
       "supportsTablet": true,
       "config": {
-        "usesNonExemptEncryption": false
+        "usesNonExemptEncryption": false,
+        "googleMapsApiKey": "AIzaSyCCbYmNEvJkBS10pQengGEB0dRnN3mvkIQ"
       }
     },
     "android": {
@@ -24,7 +25,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["android.permission.CAMERA"]
+      "permissions": ["android.permission.CAMERA"],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCCbYmNEvJkBS10pQengGEB0dRnN3mvkIQ"
+        }
+      }
     },
     "web": {
       "bundler": "metro",
