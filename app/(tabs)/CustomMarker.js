@@ -1,7 +1,6 @@
-import React from 'react';
 import { Marker } from 'react-native-maps';
 import { StyleSheet, View, Image } from 'react-native';
-import FastImage from 'react-native-fast-image';
+// import FastImage from 'react-native-fast-image';
 
 export function CustomMarker({
   color,
@@ -25,7 +24,7 @@ export function CustomMarker({
             },
           ]}
         >
-          <FastImage source={image} style={customMarkerStyles.image} />
+          <Image source={image} style={customMarkerStyles.image} />
         </View>
       </View>
     </Marker>

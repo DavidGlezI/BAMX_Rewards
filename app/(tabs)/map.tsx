@@ -11,7 +11,7 @@ import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { mapStyle } from './mapStyle';
 import { CustomMarker } from './CustomMarker';
 import { useState } from 'react';
-import FastImage from 'react-native-fast-image';
+// import FastImage from 'react-native-fast-image';
 
 
 const markers = [
@@ -167,7 +167,7 @@ export default function TabMapScreen() {
             ]}
             onTouchEnd={() => setSelectedMarker(marker.id)}
           >
-            <FastImage source={marker.image} style={styles.image} />
+            <Image source={marker.image} style={styles.image} />
           </View>
         ))}
       </ScrollView>
